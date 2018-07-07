@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "905775724347",
+    "firebase_url": "https://hott-4cfa4.firebaseio.com",
+    "project_id": "hott-4cfa4",
+    "storage_bucket": "hott-4cfa4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905775724347:android:d892ab6c096d6a57",
+        "android_client_info": {
+          "package_name": "com.hotactress.hot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905775724347-udfju27ajvm8oltqbb98rirq4hqlqvtl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hotactress.hot",
+            "certificate_hash": "1a8724c4f6535a73f09814dd0701137bf90ef794"
+          }
+        },
+        {
+          "client_id": "905775724347-5qrqml64lu7cvivp5v5cc7curgcsabi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKPKtJU_-GWPPAEuiV30dBAC3JlHlZXjg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905775724347-5qrqml64lu7cvivp5v5cc7curgcsabi8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
