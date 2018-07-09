@@ -84,24 +84,36 @@ public class GridAdapter extends BaseAdapter {
         imageView.setMinimumWidth(width/2);
         imageView.setMinimumHeight(width*3/4);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if(!nextLaunchType.equals("slider")) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                if(nextLaunchType == "actresses") {
-                    Intent intent = new Intent(activity, GridActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.KEY1, "actresses");
-                    bundle.putString(Constants.KEY2, aid);
-                    intent.putExtras(bundle);
-                    Gen.startActivity(intent, false);
-                } else {
-                    Gen.startActivity(activity, false, MainActivity.class, Constants.TITLEID, titleId);
+                    if (nextLaunchType.equals("actresses")) {
+                        Intent intent = new Intent(activity, GridActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constants.KEY1, "actresses");
+                        bundle.putString(Constants.KEY2, aid);
+                        bundle.putString(Constants.KEY3, "actressJSON");
+                        intent.putExtras(bundle);
+                        Gen.startActivity(intent, false);
+                    } else if (nextLaunchType.equals("group")) {
+                        Intent intent = new Intent(activity, GridActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constants.KEY1, "group");
+                        bundle.putString(Constants.KEY2, aid);
+                        bundle.putString(Constants.KEY3, titleId);
+                        intent.putExtras(bundle);
+                        Gen.startActivity(intent, false);
+                    }
                 }
-            }
-        });
+            });
+        }
 
 
+        if(nextLaunchType.equals("slider")) {
+
+        }
         if(!TextUtils.isEmpty(profile.getName()))
             textView.setText(profile.getName());
         else {

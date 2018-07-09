@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.hotactress.hot.R;
 import com.hotactress.hot.models.Profile;
+import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,11 +47,20 @@ public class ImageViewPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
         inflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.view_pager_item, container, false);
 
         ImageView imageView = itemView.findViewById(R.id.imageView);
+        ImageView share = itemView.findViewById(R.id.share);
+
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gen.shareImage(activity, images.get(position).getImage());
+            }
+        });
         DisplayMetrics dis = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dis);
 
@@ -63,7 +73,7 @@ public class ImageViewPagerAdapter extends PagerAdapter {
         try {
 
             Picasso.get()
-                    .load(images.get(position).getImage())
+                    .load(images.get(position).getImage() + "&type=HQ")
                     .into(imageView);
 
         } catch (Exception ex) {

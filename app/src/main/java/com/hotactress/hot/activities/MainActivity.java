@@ -34,9 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
         Intent startingIntent = getIntent();
         String titleId = startingIntent.getStringExtra(Constants.TITLEID);
+        String aid = startingIntent.getStringExtra(Constants.AID);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("title").child("titleJSON").child(titleId);
+        DatabaseReference myRef = database.getReference("title").child("titleJSON").child(aid).child(titleId);
+
+        viewPager = findViewById(R.id.viewPager);
+        imageViewPagerAdapter = new ImageViewPagerAdapter(this, profilesData);
+
+        viewPager.setAdapter(imageViewPagerAdapter);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -60,9 +66,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        viewPager = findViewById(R.id.viewPager);
-        imageViewPagerAdapter = new ImageViewPagerAdapter(this, profilesData);
-
-        viewPager.setAdapter(imageViewPagerAdapter);
     }
 }
