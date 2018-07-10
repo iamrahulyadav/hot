@@ -76,6 +76,34 @@ public class Gen {
         MyApplication.getAppContext().startActivity(Intent.createChooser(share, "Share Image"));
     }
 
+    public static void shareImageWhatsapp(Activity context, String url) {
+        View content = context.findViewById(R.id.imageView);
+        content.setDrawingCacheEnabled(true);
+        Bitmap icon = content.getDrawingCache();
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "title");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                values);
+
+
+        OutputStream outstream;
+        try {
+            outstream = context.getContentResolver().openOutputStream(uri);
+            icon.compress(Bitmap.CompressFormat.JPEG, 100, outstream);
+            outstream.close();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        share.putExtra(Intent.EXTRA_TEXT, appURL);
+        MyApplication.getAppContext().startActivity(Intent.createChooser(share, "Share Image"));
+    }
+
+
     public static void toast(String text) {
         Toast.makeText(MyApplication.getAppContext(), text, Toast.LENGTH_SHORT).show();
     }

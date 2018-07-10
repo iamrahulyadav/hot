@@ -52,15 +52,25 @@ public class ImageViewPagerAdapter extends PagerAdapter {
         View itemView = inflater.inflate(R.layout.view_pager_item, container, false);
 
         ImageView imageView = itemView.findViewById(R.id.imageView);
-        ImageView share = itemView.findViewById(R.id.share);
+        ImageView generalShare = itemView.findViewById(R.id.view_pager_share_count_image_id);
+        ImageView whatsappShare = itemView.findViewById(R.id.view_pager_whatsapp_count_image_id);
 
 
-        share.setOnClickListener(new View.OnClickListener() {
+        generalShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Gen.shareImage(activity, images.get(position).getImage());
             }
         });
+
+        whatsappShare.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Gen.shareImage(activity, images.get(position).getImage());
+            }
+        });
+
         DisplayMetrics dis = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dis);
 
@@ -74,7 +84,7 @@ public class ImageViewPagerAdapter extends PagerAdapter {
 
             Picasso.get()
                     .load(images.get(position).getImage() + "&type=HQ")
-                    .placeholder(R.drawable.picasso_placeholder)
+                    .placeholder(R.drawable.progress_animation)
                     .into(imageView);
 
         } catch (Exception ex) {
