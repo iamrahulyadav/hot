@@ -122,7 +122,7 @@ public class GridActivity extends AppCompatActivity {
         switch (requestCode) {
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                     Gen.toast("Permission Granted!");
+//                     Gen.toast("Permission Granted!");
                 } else {
                      Gen.toast("Permission Denied!");
                     // re-request permission
