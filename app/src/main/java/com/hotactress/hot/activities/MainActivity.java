@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         Intent startingIntent = getIntent();
         String titleId = startingIntent.getStringExtra(Constants.TITLEID);
         String aid = startingIntent.getStringExtra(Constants.AID);
+        final String index = startingIntent.getStringExtra(Constants.KEY1);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("title").child("titleJSON").child(aid).child(titleId);
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 profilesData.removeAll(profilesData);
                 profilesData.addAll(profiles);
                 imageViewPagerAdapter.notifyDataSetChanged();
+                viewPager.setCurrentItem(Integer.parseInt(index));
             }
 
             @Override

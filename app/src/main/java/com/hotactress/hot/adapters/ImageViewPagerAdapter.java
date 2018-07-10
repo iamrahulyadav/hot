@@ -74,6 +74,7 @@ public class ImageViewPagerAdapter extends PagerAdapter {
 
             Picasso.get()
                     .load(images.get(position).getImage() + "&type=HQ")
+                    .placeholder(R.drawable.picasso_placeholder)
                     .into(imageView);
 
         } catch (Exception ex) {

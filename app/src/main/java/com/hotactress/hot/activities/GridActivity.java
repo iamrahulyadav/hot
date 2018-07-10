@@ -1,8 +1,12 @@
 package com.hotactress.hot.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -101,11 +105,31 @@ public class GridActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.AID, finalKey2);
                     bundle.putString(Constants.TITLEID, finalKey3);
+                    bundle.putString(Constants.KEY1, i+"");
                     intent.putExtras(bundle);
                     Gen.startActivity(intent, false);
                 }
             });
         }
         gridview.setAdapter(gridAdapter);
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                     Gen.toast("Permission Granted!");
+                } else {
+                     Gen.toast("Permission Denied!");
+                    // re-request permission
+                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
+                break;
+        }
+    }
+
 }
