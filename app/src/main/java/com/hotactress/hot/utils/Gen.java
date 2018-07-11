@@ -39,7 +39,10 @@ import java.io.OutputStream;
 
 public class Gen {
 
-    static String appURL = "https://play.google.com/store/apps/details?id=com.hotactress.hot";
+    static String appURL = "For more hot images download the https://play.google.com/store/apps/details?id=com.hotactress.hot";
+static String shareTextMessage = "सिर्फ एक APP जहाँ पर आपको सभी साउथ इंडियन और बॉलीवुड हीरोइन एवं देसी लड़कियों और सविता भाबी की सारी फोटोज देखने और डाउनलोड करने को मिलेंगी.\n" +
+        "\n" +
+        "तुरंत डाउनलोड करें: http://bit.ly/2uaTAE5";
 
     public static void startActivity(Intent intent, boolean clearStack) {
         if (clearStack) {
@@ -86,7 +89,7 @@ public class Gen {
             System.err.println(e.toString());
         }
         share.putExtra(Intent.EXTRA_STREAM, uri);
-        share.putExtra(Intent.EXTRA_TEXT, appURL);
+        share.putExtra(Intent.EXTRA_TEXT, shareTextMessage);
         if (packageName != null && packageName.length() > 0)
             share.setPackage(packageName);
         MyApplication.getAppContext().startActivity(Intent.createChooser(share, "Share Image"));
