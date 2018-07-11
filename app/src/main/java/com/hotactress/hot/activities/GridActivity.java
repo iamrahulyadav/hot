@@ -28,6 +28,7 @@ import com.hotactress.hot.utils.Constants;
 import com.hotactress.hot.utils.Gen;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GridActivity extends AppCompatActivity {
@@ -82,15 +83,28 @@ public class GridActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                int i = 0;
                 List<Profile> profiles = new ArrayList<>();
                 Gen.hideLoader(activity);
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
                     Profile profile = child.getValue(Profile.class);
                     profiles.add(profile);
+                    i++;
                 }
 
                 profilesData.removeAll(profilesData);
-                profilesData.addAll(profiles);
+
+                if(i>100) {
+                    List<Profile> first100 = profiles.subList(0, 100);
+                    Collections.shuffle(first100);
+                    List<Profile> after100 = profiles.subList(101, i-1);
+
+                    profilesData.addAll(first100);
+                    profilesData.addAll(after100);
+                } else {
+                    profilesData.addAll(profiles);
+                }
+
                 gridAdapter.notifyDataSetChanged();
             }
 
