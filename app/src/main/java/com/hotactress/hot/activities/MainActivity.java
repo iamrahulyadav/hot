@@ -1,5 +1,6 @@
 package com.hotactress.hot.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.hotactress.hot.R;
 import com.hotactress.hot.adapters.ImageViewPagerAdapter;
 import com.hotactress.hot.models.Profile;
 import com.hotactress.hot.utils.Constants;
+import com.hotactress.hot.utils.Gen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Activity activity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         imageViewPagerAdapter = new ImageViewPagerAdapter(this, profilesData);
 
         viewPager.setAdapter(imageViewPagerAdapter);
+
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
