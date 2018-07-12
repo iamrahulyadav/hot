@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
@@ -26,14 +28,19 @@ import com.hotactress.hot.adapters.ImageViewPagerAdapter;
 import com.hotactress.hot.models.Profile;
 import com.hotactress.hot.utils.Constants;
 import com.hotactress.hot.utils.Gen;
+import com.hotactress.hot.utils.WebViewClientImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class GridActivity extends AppCompatActivity {
 
     private static final String TAG = "GridActivity";
+
+    private WebView webView;
+    List<String> urls;
 
     GridAdapter gridAdapter;
     ArrayList<Profile> profilesData = new ArrayList<>();
@@ -70,6 +77,7 @@ public class GridActivity extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(key1).child(key2);
+        DatabaseReference urlRef = database.getReference("urls");
 
         // TODO: Hack just because the data is saved in firebase in that way and I'm too lazy to run the data population script again :(
         if(key1.equals("actresses")) {
@@ -78,7 +86,29 @@ public class GridActivity extends AppCompatActivity {
             myRef = database.getReference("title").child("titleJSON").child(key2).child(key3);
         }
 
+        // setup web view
+        webView = findViewById(R.id.grid_web_view);
+        setupWebView(webView);
+
         Gen.showLoader(activity);
+
+        urlRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                urls = new ArrayList<>();
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    String url = child.getValue(String.class);
+                    urls.add(url);
+                }
+                loadUrlAsync(webView, urls);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -161,6 +191,23 @@ public class GridActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    public void loadUrlAsync(WebView webView, List<String> urls){
+        Collections.shuffle(urls);
+        String url = urls.get(0) + Gen.utmQueryUrl;
+        webView.loadUrl(url);
+    }
+
+    private void setupWebView(WebView webView){
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setLoadsImagesAutomatically(false);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getPath());
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        WebViewClientImpl webViewClient = new WebViewClientImpl(this);
+        webView.setWebViewClient(webViewClient);
     }
 
 }

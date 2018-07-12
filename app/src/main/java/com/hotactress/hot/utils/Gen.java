@@ -32,6 +32,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by shubhamagrawal on 06/07/18.
@@ -40,9 +42,13 @@ import java.io.OutputStream;
 public class Gen {
 
     static String appURL = "For more hot images download the https://play.google.com/store/apps/details?id=com.hotactress.hot";
-static String shareTextMessage = "सिर्फ एक APP जहाँ पर आपको सभी साउथ इंडियन और बॉलीवुड हीरोइन एवं देसी लड़कियों और सविता भाबी की सारी फोटोज देखने और डाउनलोड करने को मिलेंगी.\n" +
-        "\n" +
-        "तुरंत डाउनलोड करें: http://bit.ly/2uaTAE5";
+    static String shareTextMessage = "सिर्फ एक APP जहाँ पर आपको सभी साउथ इंडियन और बॉलीवुड हीरोइन एवं देसी लड़कियों और सविता भाबी की सारी फोटोज देखने और डाउनलोड करने को मिलेंगी.\n" +
+            "\n" +
+            "तुरंत डाउनलोड करें: http://bit.ly/2uaTAE5";
+
+    public static String utmQueryUrl = "?utm_source=hot%20app&utm_medium=webview&utm_campaign=hot%20app";
+    public static final List<String> urls = Arrays.asList("https://lolmenow.com", "https://lolmenow.com");
+
 
     public static void startActivity(Intent intent, boolean clearStack) {
         if (clearStack) {
@@ -109,7 +115,7 @@ static String shareTextMessage = "सिर्फ एक APP जहाँ पर
                 final FileOutputStream foStream;
                 try {
                     File file = new File(Environment.getExternalStorageDirectory().getPath(), "Download/HotApp");
-                    if (!file.exists())  file.mkdirs();
+                    if (!file.exists()) file.mkdirs();
 
                     final String uriSting = (file.getAbsolutePath() + "/" + imageName);
 
