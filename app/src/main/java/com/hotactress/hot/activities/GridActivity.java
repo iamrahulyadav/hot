@@ -52,6 +52,8 @@ public class GridActivity extends AppCompatActivity {
             }
         }
 
+
+        final Activity activity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
         String key1 = "popular";
@@ -76,12 +78,14 @@ public class GridActivity extends AppCompatActivity {
             myRef = database.getReference("title").child("titleJSON").child(key2).child(key3);
         }
 
+        Gen.showLoader(activity);
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int i = 0;
                 List<Profile> profiles = new ArrayList<>();
-
+                Gen.hideLoader(activity);
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
                     Profile profile = child.getValue(Profile.class);
                     profiles.add(profile);
@@ -114,7 +118,6 @@ public class GridActivity extends AppCompatActivity {
         GridView gridview = (GridView) findViewById(R.id.gridview);
 
 
-        final Activity activity = this;
         if(key1.equals("popular")) {
             // that means it is the first page
             gridAdapter = new GridAdapter(this, profilesData, "actresses");

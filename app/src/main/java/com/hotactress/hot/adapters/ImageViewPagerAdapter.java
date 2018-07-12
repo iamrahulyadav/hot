@@ -9,12 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.hotactress.hot.MyApplication;
 import com.hotactress.hot.R;
 import com.hotactress.hot.models.Profile;
 import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
+
+import lombok.Getter;
 
 /**
  * Created by shubhamagrawal on 06/07/18.
@@ -22,6 +26,7 @@ import java.util.ArrayList;
 
 public class ImageViewPagerAdapter extends PagerAdapter {
 
+    public static final String HQ_IMAGE_URL_EXTENSION = "&type=HQ";
     Activity activity;
     ArrayList<Profile> images;
     LayoutInflater inflater;
@@ -52,15 +57,32 @@ public class ImageViewPagerAdapter extends PagerAdapter {
         View itemView = inflater.inflate(R.layout.view_pager_item, container, false);
 
         ImageView imageView = itemView.findViewById(R.id.imageView);
-        ImageView share = itemView.findViewById(R.id.share);
+        ImageView generalShare = itemView.findViewById(R.id.view_pager_share_count_image_id);
+        ImageView whatsappShare = itemView.findViewById(R.id.view_pager_whatsapp_count_image_id);
+        ImageView downloadImage = itemView.findViewById(R.id.view_pager_download_count_image_id);
 
-
-        share.setOnClickListener(new View.OnClickListener() {
+        generalShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Gen.shareImage(activity, images.get(position).getImage());
+                Gen.shareImage(activity, images.get(position).getImage(), null);
             }
         });
+
+        whatsappShare.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Gen.shareImageWhatsapp(activity, images.get(position).getImage());
+            }
+        });
+
+        downloadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gen.downloadImage(activity, R.id.imageView, getImageName(position) );
+            }
+        });
+
         DisplayMetrics dis = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dis);
 
@@ -73,8 +95,8 @@ public class ImageViewPagerAdapter extends PagerAdapter {
         try {
 
             Picasso.get()
-                    .load(images.get(position).getImage() + "&type=HQ")
-                    .placeholder(R.drawable.picasso_placeholder)
+                    .load(images.get(position).getImage() + HQ_IMAGE_URL_EXTENSION)
+                    .placeholder(R.drawable.progress_animation)
                     .into(imageView);
 
         } catch (Exception ex) {
@@ -82,5 +104,10 @@ public class ImageViewPagerAdapter extends PagerAdapter {
         }
         container.addView(itemView);
         return itemView;
+    }
+
+    public String getImageName(int position){
+        String imageName = MessageFormat.format("{0}_{1}.jpg", "hot_actress", images.get(position).getImageId());
+        return imageName;
     }
 }

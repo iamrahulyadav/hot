@@ -19,6 +19,10 @@ public class Profile {
     String title;
     String titleid;
 
+    public String getImageId(){
+        return image.split("=")[1];
+    }
+
 //    public void setAspect(Object aspect) {
 //        if(aspect == null) {
 //            this.aspect = 1.0;
