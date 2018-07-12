@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "905775724347-i7ut5muor7rvp1o0rbrh9r7m8flo2brl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hotactress.hot",
+            "certificate_hash": "1684acc880add6b21248c5798795dcc358f78313"
+          }
+        },
+        {
           "client_id": "905775724347-5qrqml64lu7cvivp5v5cc7curgcsabi8.apps.googleusercontent.com",
           "client_type": 3
         }
