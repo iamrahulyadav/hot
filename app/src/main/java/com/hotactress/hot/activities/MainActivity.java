@@ -82,6 +82,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        urlRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                urls = new ArrayList<>();
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    String url = child.getValue(String.class);
+                    urls.add(url);
+                }
+                loadUrlAsync(webView, urls);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
 
 
@@ -97,9 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(false);
-        webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getPath());
-        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         WebViewClientImpl webViewClient = new WebViewClientImpl(this);
         webView.setWebViewClient(webViewClient);
     }

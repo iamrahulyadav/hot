@@ -203,9 +203,8 @@ public class GridActivity extends AppCompatActivity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(false);
-        webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getPath());
-        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         WebViewClientImpl webViewClient = new WebViewClientImpl(this);
         webView.setWebViewClient(webViewClient);
     }
