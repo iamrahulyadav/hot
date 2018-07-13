@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.arasthel.asyncjob.AsyncJob;
+import android.Manifest;
 import com.hotactress.hot.MyApplication;
 import com.hotactress.hot.R;
 import com.squareup.picasso.Picasso;
@@ -202,6 +205,16 @@ public class Gen {
             loader.setVisibility(View.GONE);
         }
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean validatePermission(Activity activity){
+        return activity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void askPermission(Activity activity){
+        activity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10);
     }
 
 }

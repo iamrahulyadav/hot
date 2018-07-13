@@ -2,6 +2,8 @@ package com.hotactress.hot.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         // setup web view
         webView = findViewById(R.id.main_web_view);
         setupWebView(webView);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Gen.validatePermission(this))
+                Gen.askPermission(this);
+        }
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
