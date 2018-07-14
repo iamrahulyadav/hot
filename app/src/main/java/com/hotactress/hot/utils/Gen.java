@@ -101,7 +101,12 @@ public class Gen {
         share.putExtra(Intent.EXTRA_TEXT, shareTextMessage);
         if (packageName != null && packageName.length() > 0)
             share.setPackage(packageName);
-        MyApplication.getAppContext().startActivity(Intent.createChooser(share, "Share Image"));
+        try {
+
+            Gen.startActivity(Intent.createChooser(share, "Share Image"), false);
+        }catch (Exception ex){
+            Log.d("dde", ex.getMessage(), ex);
+        }
     }
 
     public static void shareImageWhatsapp(Activity context, String url) {
