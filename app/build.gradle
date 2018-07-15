@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.hotactress.hot"
         minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 6
-        versionName "1.06"
+        targetSdkVersion 27
+        versionCode 9
+        versionName "1.09"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -19,26 +19,30 @@ android {
 }
 configurations.all {
     resolutionStrategy {
-        force 'com.android.support:support-annotations:26.1.0'
+        force 'com.android.support:support-annotations:27.1.0'
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.google.firebase:firebase-messaging:11.0.4'
-    implementation 'com.google.firebase:firebase-crash:11.0.4'
-    provided "org.projectlombok:lombok:1.16.10"
-    annotationProcessor "org.projectlombok:lombok:1.16.10"
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
+    implementation 'com.google.firebase:firebase-crash:16.0.1'
+    compileOnly "org.projectlombok:lombok:1.18.0"
+    annotationProcessor "org.projectlombok:lombok:1.18.0"
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.google.firebase:firebase-database:11.0.4'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
-    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:design:27.1.1'
     implementation 'com.arasthel:asyncjob-library:1.0.3'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
+
+
 
 }
 

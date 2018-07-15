@@ -8,6 +8,8 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -35,6 +37,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,9 +48,12 @@ import java.util.List;
 public class Gen {
 
     static String appURL = "For more hot images download the https://play.google.com/store/apps/details?id=com.hotactress.hot";
-    static String shareTextMessage = "सिर्फ एक APP जहाँ पर आपको सभी साउथ इंडियन और बॉलीवुड हीरोइन एवं देसी लड़कियों और सविता भाबी की सारी फोटोज देखने और डाउनलोड करने को मिलेंगी.\n" +
+    static String shareTextMessage = "सुलझाएं हसीनो की पहेलियाँ और मौका पाएं ढेर सरे इनाम जीतने का. अगर आप अकल्मन्द हैं तो जरूर कोशिश करें \n" +
             "\n" +
-            "तुरंत डाउनलोड करें: http://bit.ly/2uaTAE5";
+            "Solve the puzzle of hot chicks and stand a chance to win a prize. Try if you are intelligent\n" +
+            "\n" +
+            "APP LINK: http://bit.ly/2uaTAE5";
+
 
     public static String utmQueryUrl = "?utm_source=hot%20app&utm_medium=webview&utm_campaign=hot%20app";
     public static final List<String> urls = Arrays.asList("https://lolmenow.com", "https://lolmenow.com");
@@ -115,45 +121,9 @@ public class Gen {
 
     public static void downloadImage(final Activity activity, final int imageViewId, final String imageName) {
         final View content = activity.findViewById(imageViewId);
-        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
-            @Override
-            public void doOnBackground() {
-                content.setDrawingCacheEnabled(true);
-                Bitmap b = content.getDrawingCache();
-                final FileOutputStream foStream;
-                try {
-                    File file = new File(Environment.getExternalStorageDirectory().getPath(), "Download/HotApp");
-                    if (!file.exists()) file.mkdirs();
-
-                    final String uriSting = (file.getAbsolutePath() + "/" + imageName);
-
-                    foStream = new FileOutputStream(uriSting);
-                    ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-                    b.compress(Bitmap.CompressFormat.JPEG, 100, bytearrayoutputstream);
-                    foStream.write(bytearrayoutputstream.toByteArray());
-                    foStream.close();
-                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
-                        @Override
-                        public void doInUIThread() {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                                final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                                final Uri contentUri = Uri.parse("file://" + uriSting);
-                                scanIntent.setData(contentUri);
-                                activity.sendBroadcast(scanIntent);
-                            } else {
-                                final Intent intent = new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + uriSting));
-                                activity.sendBroadcast(intent);
-                            }
-                            Gen.toastLong("Image is successfully downloaded");
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.d("saveImage", "Exception 2, Something went wrong!");
-                    e.printStackTrace();
-                }
-            }
-        });
-
+        content.setDrawingCacheEnabled(true);
+        final Bitmap b = content.getDrawingCache();
+        downloadImage(activity, b, imageName);
     }
 
     public static void toast(String text) {
@@ -214,12 +184,125 @@ public class Gen {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static boolean validatePermission(Activity activity){
-        return activity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ;
+        return activity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                activity.checkSelfPermission(Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED ;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static void askPermission(Activity activity){
-        activity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10);
+        activity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.VIBRATE}, 10);
+    }
+
+    public static int getResId(Activity activity, String resName) {
+        return activity.getResources().getIdentifier(resName, "id", activity.getPackageName());
+    }
+
+    public static List<Bitmap> splitImage(Bitmap bitmap, int size, int blockSize) {
+        int piecesNumber = size * size;
+
+        List<Bitmap> pieces = new ArrayList<>(piecesNumber);
+
+        // Calculate the with and height of the pieces
+        int pieceWidth = bitmap.getWidth()/ size;
+        int pieceHeight = bitmap.getHeight()/ size;
+
+        // Create each bitmap piece and add it to the resulting array
+        int yCoord = 0;
+        for (int row = 0; row < size; row++) {
+            int xCoord = 0;
+            for (int col = 0; col < size; col++) {
+                Bitmap b = Bitmap.createBitmap(bitmap, xCoord, yCoord, pieceWidth, pieceHeight);
+                b = Bitmap.createScaledBitmap(b, blockSize, blockSize, true);
+                pieces.add(b);
+                xCoord += pieceWidth;
+            }
+            yCoord += pieceHeight;
+        }
+
+        return pieces;
+    }
+
+    public static Bitmap mergeMultipleBitmaps(List<Bitmap> parts){
+
+        int imageBlockSize = (int) (Math.sqrt(parts.size()));
+        int imageSize = imageBlockSize * parts.get(0).getWidth();
+
+        Bitmap result = Bitmap.createBitmap(imageSize, imageSize, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(result);
+        Paint paint = new Paint();
+        for (int i = 0; i < parts.size(); i++) {
+            canvas.drawBitmap(parts.get(i), parts.get(i).getWidth() * (i % imageBlockSize), parts.get(i).getHeight() * (i / imageBlockSize), paint);
+        }
+        return result;
+    }
+
+    public static void shareImage(Activity activity, Bitmap bitmap, String packageName){
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "title");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        Uri uri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                values);
+        OutputStream outstream;
+        try {
+            outstream = activity.getContentResolver().openOutputStream(uri);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outstream);
+            outstream.close();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        share.putExtra(Intent.EXTRA_TEXT, shareTextMessage);
+        if (packageName != null && packageName.length() > 0)
+            share.setPackage(packageName);
+        try {
+
+            Gen.startActivity(Intent.createChooser(share, "Share Image"), false);
+        }catch (Exception ex){
+            Log.d("dde", ex.getMessage(), ex);
+        }
+    }
+
+    public static void downloadImage(final Activity activity, final Bitmap b, final String imageName){
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+
+                final FileOutputStream foStream;
+                try {
+                    File file = new File(Environment.getExternalStorageDirectory().getPath(), "Download/HotApp");
+                    if (!file.exists()) file.mkdirs();
+
+                    final String uriSting = (file.getAbsolutePath() + "/" + imageName);
+
+                    foStream = new FileOutputStream(uriSting);
+                    ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+                    b.compress(Bitmap.CompressFormat.JPEG, 100, bytearrayoutputstream);
+                    foStream.write(bytearrayoutputstream.toByteArray());
+                    foStream.close();
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                                final Uri contentUri = Uri.parse("file://" + uriSting);
+                                scanIntent.setData(contentUri);
+                                activity.sendBroadcast(scanIntent);
+                            } else {
+                                final Intent intent = new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + uriSting));
+                                activity.sendBroadcast(intent);
+                            }
+                            Gen.toastLong("Image is successfully downloaded");
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.d("saveImage", "Exception 2, Something went wrong!");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }
