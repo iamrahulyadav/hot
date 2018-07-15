@@ -189,7 +189,8 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
         }
         if (v.getId() == R.id.puzzle_activity_next_button_id){
             String url = MessageFormat.format("http://104.236.43.23:3001/deepika/{0}.jpeg", new Random().nextInt(360));
-            Gen.startActivity(this, true, PuzzleSolvingActivity.class, "url", url);
+            loadImageIntoPuzzle(url);
+//            Gen.startActivity(this, true, PuzzleSolvingActivity.class, "url", url);
         }
     }
 
