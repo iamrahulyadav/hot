@@ -102,9 +102,7 @@ public class GridActivity extends AppCompatActivity implements View.OnClickListe
         topBarImageView = findViewById(R.id.activity_grid_top_bar_image_id);
         webView = findViewById(R.id.grid_web_view);
         setupWebView(webView);
-
-        Gen.showLoader(activity);
-
+        Gen.showLoader(this);
         urlRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

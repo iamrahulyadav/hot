@@ -106,10 +106,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
 
     public void loadUrlAsync(WebView webView, List<String> urls){

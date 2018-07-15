@@ -29,6 +29,7 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,7 +38,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
     public final ImageView[][] imageViewMatrix = new ImageView[PUZZLE_SIZE][PUZZLE_SIZE];
     //    public int[][] initialMatrix = new int[PUZZLE_SIZE][PUZZLE_SIZE];  // initial distorted image indexes position
 //    public int[][] solvedMatrix = new int[PUZZLE_SIZE][PUZZLE_SIZE];   // solved image index position
-    public ImageView originalImageView, downloadImageView, shareWhatsappImageView, shareImageView;
+    public ImageView originalImageView, downloadImageView, shareWhatsappImageView, shareImageView, nextImageView;
     public Button resetButton, solveButton, resetInitialButton;
     public TextView totalMovesView, timeElapsedView;
     public List<Bitmap> bitmapList;
@@ -60,6 +61,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
                 imageViewMatrix[i][j] = findViewById(x);
             }
         }
+
         Intent startingIntent = getIntent();
         url = startingIntent.getStringExtra("url");
         originalImageView = findViewById(R.id.puzzle_activity_original_image_id);
@@ -72,6 +74,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
         downloadImageView = findViewById(R.id.puzzle_activity_download_button_id);
         shareWhatsappImageView = findViewById(R.id.puzzle_activity_whatsapp_button_id);
         shareImageView = findViewById(R.id.puzzle_activity_share_button_id);
+        nextImageView = findViewById(R.id.puzzle_activity_next_button_id);
 
         loadImageIntoPuzzle(url);
 
@@ -85,6 +88,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
         downloadImageView.setOnClickListener(this);
         shareWhatsappImageView.setOnClickListener(this);
         shareImageView.setOnClickListener(this);
+        nextImageView.setOnClickListener(this);
 
     }
 
@@ -183,9 +187,15 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
         if (v.getId() == R.id.puzzle_activity_share_button_id){
             Gen.shareImage(this, mainImageBitmap, null);
         }
+        if (v.getId() == R.id.puzzle_activity_next_button_id){
+            String url = MessageFormat.format("http://104.236.43.23:3001/deepika/{0}.jpeg", new Random().nextInt(360));
+            Gen.startActivity(this, true, PuzzleSolvingActivity.class, "url", url);
+        }
     }
 
     private void loadImageIntoPuzzle(final String url) {
+        final Activity activity = this;
+        Gen.showLoader(activity);
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
@@ -196,6 +206,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
                         bitmapList = Gen.splitImage(mainImageBitmap, PUZZLE_SIZE, PUZZLE_BLOCK_SIZE);
                         puzzleMatrixHelper = new PuzzleMatrixHelper(PUZZLE_SIZE, bitmapList, totalMovesView);
                         applyImagePiecesToMatrix();
+                        Gen.hideLoader(activity);
                     }
                 });
 
