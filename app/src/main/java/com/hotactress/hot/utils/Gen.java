@@ -8,6 +8,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -36,7 +37,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -265,17 +269,17 @@ public class Gen {
         }
     }
 
-    public static void downloadImage(final Activity activity, final Bitmap b, final String imageName){
+    public static String downloadImage(final Activity activity, final Bitmap b, final String imageName){
+        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Download/HotApp");
+        if (!file.exists()) file.mkdirs();
+        final String uriSting = (file.getAbsolutePath() + "/" + imageName);
+
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
 
                 final FileOutputStream foStream;
                 try {
-                    File file = new File(Environment.getExternalStorageDirectory().getPath(), "Download/HotApp");
-                    if (!file.exists()) file.mkdirs();
-
-                    final String uriSting = (file.getAbsolutePath() + "/" + imageName);
 
                     foStream = new FileOutputStream(uriSting);
                     ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
@@ -303,6 +307,22 @@ public class Gen {
                 }
             }
         });
+
+        return uriSting;
+    }
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            return BitmapFactory.decodeStream(input);
+        } catch (IOException e) {
+            Log.e("trivia", e.getMessage(), e);
+            return null;
+        }
     }
 
 }

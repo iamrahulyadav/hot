@@ -41,6 +41,13 @@ dependencies {
     implementation 'com.arasthel:asyncjob-library:1.0.3'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.google.firebase:firebase-storage:16.0.1'
+// https://mvnrepository.com/artifact/joda-time/joda-time
+    implementation group: 'joda-time', name: 'joda-time', version: '2.10'
+    implementation group: 'org.webjars', name: 'momentjs', version: '2.22.2'
+
+
 
 
 

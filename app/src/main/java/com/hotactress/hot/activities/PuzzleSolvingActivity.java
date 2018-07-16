@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,16 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arasthel.asyncjob.AsyncJob;
-import com.github.javafaker.Faker;
 import com.hotactress.hot.R;
 import com.hotactress.hot.utils.Gen;
 import com.hotactress.hot.utils.PuzzleMatrixHelper;
 import com.hotactress.hot.utils.SwipeDetector;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
@@ -145,19 +139,6 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            return BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
-            Log.e("trivia", e.getMessage(), e);
-            return null;
-        }
-    }
 
     private void randomizeImageMatrix(PuzzleMatrixHelper solver, List<Bitmap> originalImageBitmaps) {
         solver.randomizeOriginalMatrix();
@@ -200,7 +181,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
-                mainImageBitmap = getBitmapFromURL(url);
+                mainImageBitmap = Gen.getBitmapFromURL(url);
                 AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                     @Override
                     public void doInUIThread() {
