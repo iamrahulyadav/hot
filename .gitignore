@@ -137,6 +137,9 @@ Thumbs.db
 # Package Files #
 *.war
 *.ear
+notification-server/functions/node_modules
+
+notification-server/functions/package-lock.json
 
 .idea
 

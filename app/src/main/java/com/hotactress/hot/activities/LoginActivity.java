@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
         activity = this;
@@ -45,6 +45,13 @@ public class LoginActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser() != null) {
             Gen.startActivity(this, true, ChatMainActivity.class);
         }
+
+        findViewById(R.id.login_register_link).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gen.startActivity(activity, false, RegisterActivity.class);
+            }
+        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override

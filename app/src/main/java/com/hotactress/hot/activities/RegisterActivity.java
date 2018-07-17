@@ -14,8 +14,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hotactress.hot.R;
+import com.hotactress.hot.models.UserProfile;
 import com.hotactress.hot.utils.Gen;
+
+import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -42,6 +49,14 @@ public class RegisterActivity extends AppCompatActivity {
             Gen.startActivity(this, true, ChatMainActivity.class);
         }
 
+        findViewById(R.id.register_login_link).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gen.startActivity(activity, false, LoginActivity.class);
+            }
+        });
+
+
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,13 +71,32 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void registerUser(String displayNameString, String emailString, String passwordString) {
+    private void registerUser(final String displayNameString, final String emailString, String passwordString) {
         mAuth.createUserWithEmailAndPassword(emailString, passwordString).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Gen.hideLoader(activity);
                 if(task.isSuccessful()) {
-                    Gen.startActivity(activity, true, GridActivity.class);
+
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    String uid = currentUser.getUid();
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference().child("users").child(uid);
+                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+                    UserProfile userProfile = new UserProfile();
+                    userProfile.setId(uid);
+                    userProfile.setName(displayNameString);
+                    userProfile.setEmail(emailString);
+                    userProfile.setStatus("Hi there! I'm using Hot");
+                    userProfile.setThumbImage("default");
+                    userProfile.setImage("default");
+                    userProfile.setDeviceToken(deviceToken);
+
+                    myRef.setValue(userProfile);
+
+                    Gen.startActivity(activity, true, ChatMainActivity.class);
                 } else {
                     Gen.toast("Something went wrong while registering the user");
                 }

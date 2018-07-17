@@ -38,12 +38,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
 
         if(data.size() > 0) {
-            String title, message, imageUrl, url;
+            String title, message, imageUrl, url, fromUserId;
 
             title = data.get("title");
             message = data.get("message");
             imageUrl = data.get("imageUrl");
             url = data.get("url");
+            fromUserId = data.get("from_user_id");
 
             Intent notificationIntent;
             if(url != null) {
