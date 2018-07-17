@@ -25,7 +25,7 @@ public class PuzzleMatrixHelper {
 
     public static final int PUZZLE_SIZE = 3;
     public static final int PUZZLE_BLOCK_SIZE = 400;
-    public static final int RANDOMIZE_STEP_SIZE = 5;
+    public static final int RANDOMIZE_STEP_SIZE = 10;
     private static int DUMMY_VALUE = -1;
     private int sideSize;
     private int totalBlocks;

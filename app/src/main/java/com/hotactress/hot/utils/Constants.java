@@ -11,4 +11,7 @@ public class Constants {
     public static final String KEY2 = "KEY2";
     public static final String KEY3 = "KEY3";
     public static final String URL = "url";
+
+    public static final String PUZZLE_SOLVING_ACTIVITY = "PUZZLE_SOLVING_ACTIVITY";
+    public static final String SHARE_ACTIVITY = "SHARE_ACTIVITY";
 }

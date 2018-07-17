@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arasthel.asyncjob.AsyncJob;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.hotactress.hot.R;
+import com.hotactress.hot.utils.Constants;
 import com.hotactress.hot.utils.Gen;
 import com.hotactress.hot.utils.PuzzleMatrixHelper;
 import com.hotactress.hot.utils.SwipeDetector;
@@ -44,6 +46,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
     public Bitmap mainImageBitmap;
     public String imageName = new Date().getTime() + ".jpeg"; //faker.name().fullName().replaceAll(" ", "") + ".jpeg";
     public String url ;
+    public FirebaseAnalytics firebaseAnalytics ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
                 imageViewMatrix[i][j] = findViewById(x);
             }
         }
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Intent startingIntent = getIntent();
         url = startingIntent.getStringExtra("url");
@@ -114,12 +118,15 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
                         else if (SwipeType == SwipeDetector.SwipeTypeEnum.RIGHT_TO_LEFT)
                             toY--;
 
+                        Bundle b = new Bundle();
 
                         if (!puzzleMatrixHelper.isValidMove(fromX, fromY, toX, toY)) {
+                            b.putString(FirebaseAnalytics.Param.ITEM_NAME, "error_move");
                             errorMp.start();
                             vibe.vibrate(100);
                             Toast.makeText(activity, "Sorry this move is not acceptable", Toast.LENGTH_SHORT).show();
                         } else {
+                            b.putString(FirebaseAnalytics.Param.ITEM_NAME, "success_move");
                             successMp.start();
                             ImageView toImageView = imageViewMatrix[toX][toY];
                             Bitmap fromBm = puzzleMatrixHelper.getBitmap(fromX, fromY);
@@ -133,6 +140,7 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
                                 shareLayout.setVisibility(View.VISIBLE);
                             }
                         }
+                        firebaseAnalytics.logEvent(Constants.PUZZLE_SOLVING_ACTIVITY, b);
                     }
                 });
             }

@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.arasthel.asyncjob.AsyncJob;
 import android.Manifest;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.hotactress.hot.MyApplication;
 import com.hotactress.hot.R;
 import com.squareup.picasso.Picasso;
@@ -61,6 +63,7 @@ public class Gen {
 
     public static String utmQueryUrl = "?utm_source=hot%20app&utm_medium=webview&utm_campaign=hot%20app";
     public static final List<String> urls = Arrays.asList("https://lolmenow.com", "https://lolmenow.com");
+    public static FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(MyApplication.getAppContext());
 
 
     public static void startActivity(Intent intent, boolean clearStack) {
@@ -109,10 +112,15 @@ public class Gen {
         }
         share.putExtra(Intent.EXTRA_STREAM, uri);
         share.putExtra(Intent.EXTRA_TEXT, shareTextMessage);
-        if (packageName != null && packageName.length() > 0)
+        Bundle b = new Bundle();
+        if (packageName != null && packageName.length() > 0) {
             share.setPackage(packageName);
+            b.putString(FirebaseAnalytics.Param.ITEM_NAME, "whatsapp_share");
+        }else{
+            b.putString(FirebaseAnalytics.Param.ITEM_NAME, "general_share");
+        }
         try {
-
+            firebaseAnalytics.logEvent(Constants.SHARE_ACTIVITY, b);
             Gen.startActivity(Intent.createChooser(share, "Share Image"), false);
         }catch (Exception ex){
             Log.d("dde", ex.getMessage(), ex);
@@ -259,10 +267,15 @@ public class Gen {
         }
         share.putExtra(Intent.EXTRA_STREAM, uri);
         share.putExtra(Intent.EXTRA_TEXT, shareTextMessage);
-        if (packageName != null && packageName.length() > 0)
+        Bundle b = new Bundle();
+        if (packageName != null && packageName.length() > 0) {
             share.setPackage(packageName);
+            b.putString(FirebaseAnalytics.Param.ITEM_NAME, "whatsapp_share");
+        }else{
+            b.putString(FirebaseAnalytics.Param.ITEM_NAME, "general_share");
+        }
         try {
-
+            firebaseAnalytics.logEvent(Constants.SHARE_ACTIVITY, b);
             Gen.startActivity(Intent.createChooser(share, "Share Image"), false);
         }catch (Exception ex){
             Log.d("dde", ex.getMessage(), ex);
@@ -273,6 +286,9 @@ public class Gen {
         File file = new File(Environment.getExternalStorageDirectory().getPath(), "Download/HotApp");
         if (!file.exists()) file.mkdirs();
         final String uriSting = (file.getAbsolutePath() + "/" + imageName);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "download");
+        firebaseAnalytics.logEvent(Constants.SHARE_ACTIVITY, bundle);
 
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
