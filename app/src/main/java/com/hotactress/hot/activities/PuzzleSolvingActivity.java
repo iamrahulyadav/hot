@@ -62,6 +62,10 @@ public class PuzzleSolvingActivity extends AppCompatActivity implements View.OnC
 
         Intent startingIntent = getIntent();
         url = startingIntent.getStringExtra("url");
+
+        if(url == null)
+            url = MessageFormat.format("http://104.236.43.23:3001/deepika/{0}.jpeg", new Random().nextInt(360));
+
         originalImageView = findViewById(R.id.puzzle_activity_original_image_id);
         resetButton = findViewById(R.id.puzzle_activity_reset_button_id);
         resetInitialButton = findViewById(R.id.puzzle_activity_reset_initial_id);

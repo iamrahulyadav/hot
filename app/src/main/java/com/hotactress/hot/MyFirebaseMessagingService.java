@@ -3,14 +3,19 @@ package com.hotactress.hot;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hotactress.hot.activities.GridActivity;
+import com.hotactress.hot.utils.VolleySingelton;
 
 import java.util.Map;
 
@@ -27,39 +32,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.d("msg", "onMessageReceived: " + remoteMessage.getData().get("message"));
-        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
         Map<String, String> data = remoteMessage.getData();
-        String message=null, activity=null;
 
-        String url = (String) data.get("url");
+        if(data.size() > 0) {
+            String title, message, imageUrl, url, fromUserId;
 
-//        for(Map.Entry entry: data.entrySet()) {
-//            String key = entry.getKey().toString();
-//            if(key.equals(Constants.UPDATE_ORDER_NOTIFICATION)) {
-//                Gen.playNotificationSound();
-//                Gen.triggerOrderRefresh();
-//                return;
-//            } else if(key.equals(Constants.MESSAGE)) {
-//                message = entry.getValue().toString();
-//            } else if(key.equals(Constants.ACTIVITY)) {
-//                activity = entry.getValue().toString();
-//            }
-//        }
-
-
-        if(notification != null && notification.getBody() != null && notification.getTitle()!=null){
-            NotificationCompat.Builder builder = new  NotificationCompat.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setColor(getResources().getColor(R.color.colorBlueDark))
-                    .setContentTitle(notification.getTitle())
-                    .setStyle(new NotificationCompat.BigTextStyle()
-                            .bigText(notification.getBody()))
-                    .setContentText(notification.getBody())
-                    .setAutoCancel(true)
-                    .setSound(uri);
+            title = data.get("title");
+            message = data.get("message");
+            imageUrl = data.get("imageUrl");
+            url = data.get("url");
+            fromUserId = data.get("from_user_id");
 
             Intent notificationIntent;
             if(url != null) {
@@ -71,11 +56,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             }
 
-            PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentIntent(resultPendingIntent);
+            notificationIntent.addFlags(notificationIntent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            manager.notify(0, builder.build());
+
+            final NotificationCompat.Builder builder = new  NotificationCompat.Builder(this)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setColor(getResources().getColor(R.color.colorBlueDark))
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setSound(uri);
+
+            ImageRequest imageRequest = new ImageRequest(imageUrl, new Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap response) {
+
+                    builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(response));
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    notificationManager.notify(0, builder.build());
+                }
+            }, 0, 0, null, Bitmap.Config.RGB_565, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    Log.d(TAG, error.getMessage());
+                }
+            });
+
+            VolleySingelton.getInstance().getRequestQueue().add(imageRequest);
         }
     }
 

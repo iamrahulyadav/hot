@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">hot</string>
+    <string name="logout">Logout</string>
+    <string name="all_users">All Users</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="solve_mystry">Solve mystry</string>
+    <string name="hot_pics">Hot pics</string>
 </resources>

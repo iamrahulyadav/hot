@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_marginLeft="@dimen/margin_left"
+    android:layout_marginRight="@dimen/margin_right"
+    android:layout_height="match_parent"
+    tools:context="com.hotactress.hot.activities.LoginActivity"
+    >
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/login_logo"
+        android:layout_marginTop="@dimen/margin_top_big"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_launcher"/>
+
+
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_email"
+        android:hint="Enter email address"
+        android:layout_below="@id/login_logo"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:inputType="textEmailAddress"
+        />
+
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_password"
+        android:hint="Enter password"
+        android:layout_below="@id/login_email"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:inputType="textPassword"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log In"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_below="@id/login_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:id="@+id/login"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LinkButton"
+        android:id="@+id/login_register_link"
+        android:text="Don't have account? Sign up here"
+        android:layout_below="@id/login"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>
