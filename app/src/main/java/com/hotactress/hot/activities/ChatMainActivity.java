@@ -99,6 +99,8 @@ public class ChatMainActivity extends PresenceActivity {
             Gen.startActivity(this, false, SettingsActivity.class);
         } else if(item.getItemId() == R.id.view_photos) {
             Gen.startActivity(this, false, GridActivity.class);
+        } else if(item.getItemId() == R.id.play_game) {
+            Gen.startActivity(this, false, PuzzleSolvingActivity.class);
         }
 
         return true;

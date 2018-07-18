@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,13 +33,16 @@ import com.hotactress.hot.models.Profile;
 import com.hotactress.hot.utils.Constants;
 import com.hotactress.hot.utils.Gen;
 import com.hotactress.hot.utils.WebViewClientImpl;
+import com.squareup.picasso.Picasso;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
-public class GridActivity extends AppCompatActivity {
+public class GridActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "GridActivity";
 
@@ -46,6 +51,9 @@ public class GridActivity extends AppCompatActivity {
 
     GridAdapter gridAdapter;
     ArrayList<Profile> profilesData = new ArrayList<>();
+    public ConstraintLayout constraintLayout;
+    public String url = MessageFormat.format("http://104.236.43.23:3001/deepika/{0}.jpeg", new Random().nextInt(360));
+    public ImageView topBarImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +97,12 @@ public class GridActivity extends AppCompatActivity {
         }
 
         // setup web view
+        constraintLayout = findViewById(R.id.activity_grid_top_bar_layout_id);
+        constraintLayout.setOnClickListener(this);
+        topBarImageView = findViewById(R.id.activity_grid_top_bar_image_id);
         webView = findViewById(R.id.grid_web_view);
         setupWebView(webView);
-
-        Gen.showLoader(activity);
-
+        Gen.showLoader(this);
         urlRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -181,6 +190,8 @@ public class GridActivity extends AppCompatActivity {
             Gen.askPermission(this);
         }
 
+        Picasso.get().load(url).placeholder(R.drawable.picasso_placeholder).into(topBarImageView);
+
     }
 
     @Override
@@ -214,4 +225,11 @@ public class GridActivity extends AppCompatActivity {
         webView.setWebViewClient(webViewClient);
     }
 
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.activity_grid_top_bar_layout_id){
+            Gen.startActivity(this, false, PuzzleSolvingActivity.class, "url", url);
+        }
+    }
 }

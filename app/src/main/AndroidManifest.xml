@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -14,32 +15,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.PuzzleSolvingActivity"></activity>
         <activity
-            android:name=".activities.MainActivity"
-            android:screenOrientation="portrait" />
-
+            android:name=".activities.GridActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.ProfileActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activities.UsersActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activities.ChatMainActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activities.ChatActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activities.RegisterActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activities.StartActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,20 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+
         <activity
-            android:name=".activities.GridActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
         <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
@@ -92,7 +84,7 @@
             android:resource="@color/colorAccent" />
 
         <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.ChangeStatusActivity"></activity>
+        <activity android:name=".activities.ChangeStatusActivity" />
     </application>
 
 </manifest>
