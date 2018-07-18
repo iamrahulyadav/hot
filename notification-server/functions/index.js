@@ -17,6 +17,40 @@ admin.initializeApp(functions.config().firebase);
  * your requirement
  */
 
+ exports.notify = functions.https.onCall((data, context) => {
+    console.log("data is ", data);
+    const {userId, name} = data;
+
+    console.log("userId is ", userId);
+
+    const deviceToken = admin.database().ref(`/users/${userId}/deviceToken`).once('value');
+
+    devicetoken.then(token_id => {
+
+        const payload = {
+                notification: {
+                  title : "New message",
+                  body: `You have new message from ${name}`,
+                  icon: "default",
+                  click_action : "com.hotactress.hot.activities.StartActivity"
+                },
+                data : {
+                  from_user_id: null
+                }
+              };
+
+
+              return admin.messaging().sendToDevice(token_id, payload).then(response => {
+
+                console.log('notification sent to user ', data.userId);
+
+              });
+    });
+
+
+  });
+
+
 exports.sendNotification = functions.database.ref('/notifications/{user_id}/{notification_id}').onWrite((snapshot, event) => {
 
 

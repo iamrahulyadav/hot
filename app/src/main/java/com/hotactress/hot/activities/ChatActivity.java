@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +43,7 @@ import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.adapters.MessageAdapter;
 import com.hotactress.hot.models.Messages;
 import com.hotactress.hot.utils.FirebaseUtil;
+import com.hotactress.hot.utils.Gen;
 import com.hotactress.hot.utils.GetTimeAgo;
 import com.squareup.picasso.Picasso;
 
@@ -255,16 +257,27 @@ public class ChatActivity extends PresenceActivity {
             final String push_id = user_message_push.getKey();
 
 
-            StorageReference filepath = mImageStorage.child("message_images").child( push_id + ".jpg");
+            final StorageReference filepath = mImageStorage.child("message_images").child( push_id + ".jpg");
 
-            filepath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            filepath.putFile(imageUri)
+                    .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return filepath.getDownloadUrl();
+                }
+            })
+            .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
 
                     if(task.isSuccessful()){
 
-                        String download_url = task.getResult().getDownloadUrl().toString();
-
+                        String download_url = task.getResult().toString();
 
                         Map messageMap = new HashMap();
                         messageMap.put("message", download_url);
@@ -452,6 +465,8 @@ public class ChatActivity extends PresenceActivity {
                     }
                 }
             });
+
+            Gen.sendNotification(mChatUser);
         }
     }
 

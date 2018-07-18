@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,12 @@ import com.arasthel.asyncjob.AsyncJob;
 import android.Manifest;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.FirebaseFunctionsException;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.hotactress.hot.MyApplication;
 import com.hotactress.hot.R;
 import com.squareup.picasso.Picasso;
@@ -45,13 +52,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by shubhamagrawal on 06/07/18.
  */
 
 public class Gen {
+
+    private static final String TAG = "Gen";
 
     static String appURL = "For more hot images download the https://play.google.com/store/apps/details?id=com.hotactress.hot";
     static String shareTextMessage = "सुलझाएं हसीनो की पहेलियाँ और मौका पाएं ढेर सरे इनाम जीतने का. अगर आप अकल्मन्द हैं तो जरूर कोशिश करें \n" +
@@ -65,6 +76,43 @@ public class Gen {
     public static final List<String> urls = Arrays.asList("https://lolmenow.com", "https://lolmenow.com");
     public static FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(MyApplication.getAppContext());
 
+    private static FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
+
+    public static void sendNotification(String userId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("userId", userId);
+
+        Task<String> notificationTask = mFunctions
+                .getHttpsCallable("notify")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        String result = (String) task.getResult().getData();
+                        return result;
+                    }
+                });
+
+        notificationTask.addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Exception e = task.getException();
+                    if (e instanceof FirebaseFunctionsException) {
+                        FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                        FirebaseFunctionsException.Code code = ffe.getCode();
+                        Object details = ffe.getDetails();
+                    }
+                } else {
+                    Log.d(TAG, "notification sent successfully");
+                    Log.d(TAG, task.getResult());
+                }
+            }
+        });
+    }
 
     public static void startActivity(Intent intent, boolean clearStack) {
         if (clearStack) {

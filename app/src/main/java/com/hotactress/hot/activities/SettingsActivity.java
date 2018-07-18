@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -187,24 +188,48 @@ public class SettingsActivity extends PresenceActivity {
                 final byte[] thumb_byte = baos.toByteArray();
 
 
-                StorageReference filepath = mImageStorage.child("profile_images").child(current_user_id + ".jpg");
+                final StorageReference filepath = mImageStorage.child("profile_images").child(current_user_id + ".jpg");
                 final StorageReference thumb_filepath = mImageStorage.child("profile_images").child("thumbs").child(current_user_id + ".jpg");
 
 
-                filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                filepath.putFile(resultUri)
+                        .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                    throw task.getException();
+                                }
 
-                        if(task.isSuccessful()){
+                                // Continue with the task to get the download URL
+                                return filepath.getDownloadUrl();
+                            }
+                        })
+                        .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
 
-                            final String download_url = task.getResult().getDownloadUrl().toString();
+                                if(task.isSuccessful()){
+
+                            final String download_url = task.getResult().toString();
 
                             UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
-                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
+                            uploadTask
+                                    .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                        @Override
+                                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                            if (!task.isSuccessful()) {
+                                                throw task.getException();
+                                            }
 
-                                    String thumb_downloadUrl = thumb_task.getResult().getDownloadUrl().toString();
+                                            // Continue with the task to get the download URL
+                                            return filepath.getDownloadUrl();
+                                        }
+                                    })
+                                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> thumb_task) {
+
+                                    String thumb_downloadUrl = thumb_task.getResult().toString();
 
                                     if(thumb_task.isSuccessful()){
 
@@ -228,6 +253,7 @@ public class SettingsActivity extends PresenceActivity {
                                 }
                             });
                         } else {
+                                    String exception = task.getException().getStackTrace().toString();
                             Gen.toast("Error in uploading.");
                             mProgressDialog.dismiss();
                         }
