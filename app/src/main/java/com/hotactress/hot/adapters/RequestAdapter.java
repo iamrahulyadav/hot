@@ -1,7 +1,6 @@
 package com.hotactress.hot.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -24,8 +23,10 @@ import com.hotactress.hot.R;
 import com.hotactress.hot.activities.ChatActivity;
 import com.hotactress.hot.activities.ProfileActivity;
 import com.hotactress.hot.models.Conv;
-import com.hotactress.hot.models.Friend;
+import com.hotactress.hot.models.Profile;
+import com.hotactress.hot.models.Request;
 import com.hotactress.hot.models.UserProfile;
+import com.hotactress.hot.utils.FirebaseUtil;
 import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
 
@@ -33,27 +34,20 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static java.security.AccessController.getContext;
-
 
 /**
  * Created by shubham on 19/12/17.
  */
 
-public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
+public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder>{
 
-    public List<Conv> convList;
-    private static final String TAG = ChatsAdapter.class.getSimpleName();
+    public List<Request> requestList;
+    private static final String TAG = RequestAdapter.class.getSimpleName();
     Activity activity;
-    private DatabaseReference mConvDatabase;
-    private DatabaseReference mMessageDatabase;
-    private DatabaseReference mUsersDatabase;
 
 
-    public ChatsAdapter(List<Conv> convList, String userId, Activity activity){
-        this.convList = convList;
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference("users");
-        mMessageDatabase = FirebaseDatabase.getInstance().getReference("messages").child(userId);
+    public RequestAdapter(List<Request> convList, String userId, Activity activity){
+        this.requestList = convList;
         this.activity = activity;
     }
 
@@ -64,68 +58,23 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder convViewHolder, int position) {
-        final Conv conv = convList.get(position);
-        final String list_user_id = conv.getId();
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+        final Request request = requestList.get(position);
+        final String list_user_id = request.getId();
 
-        Query lastMessageQuery = mMessageDatabase.child(list_user_id).limitToLast(1);
-
-        lastMessageQuery.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String type = dataSnapshot.child("type").getValue().toString();
-                String data = dataSnapshot.child("message").getValue().toString();
-
-                if(!type.equals("text")) {
-                    data = "[IMAGE]";
-                }
-                convViewHolder.setMessage(data, conv.isSeen());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
+        FirebaseUtil.getUsersRefForUser(list_user_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                final String requestFriendId = dataSnapshot.getKey();
+                final UserProfile user = dataSnapshot.getValue(UserProfile.class);
+                viewHolder.setName(user.getName());
+                viewHolder.setUserImage(user.getThumbImage());
+                viewHolder.setMessage(user.getStatus(), false /*not sure*/);
 
-                final String userName = dataSnapshot.child("name").getValue().toString();
-                String userThumb = dataSnapshot.child("thumbImage").getValue().toString();
-
-                if(dataSnapshot.hasChild("online")) {
-                    String userOnline = dataSnapshot.child("online").getValue().toString();
-                    convViewHolder.setUserOnline(userOnline);
-                }
-
-                convViewHolder.setName(userName);
-                convViewHolder.setUserImage(userThumb);
-
-                convViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent chatIntent = new Intent(activity, ChatActivity.class);
-                        chatIntent.putExtra("user_id", list_user_id);
-                        chatIntent.putExtra("user_name", userName);
-                        activity.startActivity(chatIntent);
+                        Gen.startActivity(activity, false, ProfileActivity.class, "user_id", requestFriendId);
                     }
                 });
             }
@@ -139,7 +88,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return convList.size();
+        return requestList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

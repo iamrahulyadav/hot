@@ -19,9 +19,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.UsersActivity;
 import com.hotactress.hot.adapters.FriendsAdapter;
 import com.hotactress.hot.adapters.UserListAdapter;
 import com.hotactress.hot.models.Friend;
+import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -77,6 +79,14 @@ public class FriendsFragment extends Fragment {
         mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
         mFriendsList.setAdapter(friendsAdapter);
 
+        View.OnClickListener goToAllUsersActivity = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gen.startActivity(getActivity(), false, UsersActivity.class );
+            }
+        };
+
+        mMainView.findViewById(R.id.friend_no_result_layout).setOnClickListener(goToAllUsersActivity);
 
         mFriendsDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -92,6 +102,13 @@ public class FriendsFragment extends Fragment {
                 // notify data change
                 friendList.removeAll(friendList);
                 friendList.addAll(newFriendList);
+                if(friendList.size() == 0) {
+                    mMainView.findViewById(R.id.friend_no_result_layout).setVisibility(View.VISIBLE);
+                    mFriendsList.setVisibility(View.GONE);
+                } else {
+                    mFriendsList.setVisibility(View.VISIBLE);
+                    mMainView.findViewById(R.id.friend_no_result_layout).setVisibility(View.GONE);
+                }
                 friendsAdapter.notifyDataSetChanged();
             }
 

@@ -53,6 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Up"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_below="@id/register_password"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/margin_bottom"

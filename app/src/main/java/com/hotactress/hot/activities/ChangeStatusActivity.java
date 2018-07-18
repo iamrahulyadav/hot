@@ -17,11 +17,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.adapters.UserListAdapter;
 import com.hotactress.hot.models.UserProfile;
 import com.hotactress.hot.utils.Gen;
 
-public class ChangeStatusActivity extends AppCompatActivity {
+public class ChangeStatusActivity extends PresenceActivity {
 
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;

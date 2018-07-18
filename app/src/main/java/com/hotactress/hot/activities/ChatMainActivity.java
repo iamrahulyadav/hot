@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.adapters.SectionsPagerAdapter;
 
 
@@ -24,7 +27,7 @@ import com.hotactress.hot.utils.Gen;
  * Created by shubhamagrawal on 16/07/18.
  */
 
-public class ChatMainActivity extends AppCompatActivity {
+public class ChatMainActivity extends PresenceActivity {
 
     private static final String TAG = "ChatMainActivity";
 
@@ -66,16 +69,6 @@ public class ChatMainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser == null) {
             Gen.startActivity(this, true, RegisterActivity.class);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
-            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 

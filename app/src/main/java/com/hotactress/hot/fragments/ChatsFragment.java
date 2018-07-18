@@ -25,10 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.ChatMainActivity;
+import com.hotactress.hot.activities.UsersActivity;
 import com.hotactress.hot.adapters.ChatsAdapter;
 import com.hotactress.hot.adapters.FriendsAdapter;
 import com.hotactress.hot.models.Conv;
 import com.hotactress.hot.models.Friend;
+import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -90,6 +93,15 @@ public class ChatsFragment extends Fragment {
         mConvList.setLayoutManager(linearLayoutManager);
         mConvList.setAdapter(chatsAdapter);
 
+        View.OnClickListener goToAllUsersActivity = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gen.startActivity(getActivity(), false, UsersActivity.class );
+            }
+        };
+
+        mMainView.findViewById(R.id.chat_no_result_layout).setOnClickListener(goToAllUsersActivity);
+
         mConvDatabase.orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -104,6 +116,13 @@ public class ChatsFragment extends Fragment {
                 // notify data change
                 convList.removeAll(convList);
                 convList.addAll(newConvList);
+                if(convList.size() == 0) {
+                    mMainView.findViewById(R.id.chat_no_result_layout).setVisibility(View.VISIBLE);
+                    mConvList.setVisibility(View.GONE);
+                } else {
+                    mConvList.setVisibility(View.VISIBLE);
+                    mMainView.findViewById(R.id.chat_no_result_layout).setVisibility(View.GONE);
+                }
                 chatsAdapter.notifyDataSetChanged();
             }
 

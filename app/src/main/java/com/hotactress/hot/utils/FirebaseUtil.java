@@ -25,5 +25,4 @@ public class FirebaseUtil {
         return getUsersRef().child(userId);
     }
 
-
 }

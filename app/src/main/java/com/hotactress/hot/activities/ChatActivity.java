@@ -38,8 +38,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.adapters.MessageAdapter;
 import com.hotactress.hot.models.Messages;
+import com.hotactress.hot.utils.FirebaseUtil;
 import com.hotactress.hot.utils.GetTimeAgo;
 import com.squareup.picasso.Picasso;
 
@@ -50,7 +52,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends PresenceActivity {
 
     private String mChatUser;
     private Toolbar mChatToolbar;
@@ -161,7 +163,7 @@ public class ChatActivity extends AppCompatActivity {
                 } else {
                     GetTimeAgo getTimeAgo = new GetTimeAgo();
                     long lastTime = Long.parseLong(online);
-                    String lastSeenTime = getTimeAgo.getTimeAgo(lastTime, getApplicationContext());
+                    String lastSeenTime = getTimeAgo.getTimeAgo(lastTime);
                     mLastSeenView.setText(lastSeenTime);
                 }
                 Picasso.get().load(image).placeholder(R.mipmap.default_avatar).into(mProfileImage);

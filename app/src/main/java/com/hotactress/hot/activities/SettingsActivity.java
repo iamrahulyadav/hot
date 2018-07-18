@@ -26,6 +26,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.models.UserProfile;
 import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.NetworkPolicy;
@@ -43,7 +44,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends PresenceActivity {
 
     private static final String TAG = "SettingsActivity";
     private static final int GALLERY_PICK = 1;

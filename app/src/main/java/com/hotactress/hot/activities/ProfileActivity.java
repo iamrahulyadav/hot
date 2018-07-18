@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.models.UserProfile;
 import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
@@ -30,7 +31,7 @@ import java.util.Map;
  * Created by shubhamagrawal on 17/07/18.
  */
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends PresenceActivity {
 
     private ImageView mProfileImage;
     private TextView mProfileName, mProfileStatus, mProfileFriendsCount;

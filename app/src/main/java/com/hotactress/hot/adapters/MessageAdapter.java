@@ -23,6 +23,7 @@ import com.hotactress.hot.R;
 import com.hotactress.hot.activities.ChatActivity;
 import com.hotactress.hot.models.Messages;
 import com.hotactress.hot.utils.FirebaseUtil;
+import com.hotactress.hot.utils.GetTimeAgo;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -51,7 +52,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView messageText;
+        public TextView messageText, timeText;
         public CircleImageView profileImage;
         public TextView displayName;
         public PhotoView messageImage;
@@ -59,6 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         public MessageViewHolder(View view) {
             super(view);
 
+            timeText = (TextView) view.findViewById(R.id.time_text_layout);
             messageText = (TextView) view.findViewById(R.id.message_text_layout);
             profileImage = (CircleImageView) view.findViewById(R.id.message_profile_layout);
             displayName = (TextView) view.findViewById(R.id.name_text_layout);
@@ -93,6 +95,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             }
         });
 
+        viewHolder.timeText.setText(GetTimeAgo.getTimeAgo(c.getTime()));
         if(message_type.equals("text")) {
             viewHolder.messageText.setText(c.getMessage());
             viewHolder.messageImage.setVisibility(View.GONE);

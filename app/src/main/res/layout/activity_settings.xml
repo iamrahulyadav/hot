@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context="com.hotactress.hot.activities.SettingsActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -13,7 +12,6 @@
         android:layout_height="200dp"
         android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
         android:src="@mipmap/default_avatar" />
 
     <TextView
@@ -39,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/settings_status"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="84dp"
         android:text="CHANGE IMAGE" />

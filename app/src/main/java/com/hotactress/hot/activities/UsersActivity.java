@@ -14,13 +14,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.adapters.UserListAdapter;
 import com.hotactress.hot.models.UserProfile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersActivity extends AppCompatActivity {
+public class UsersActivity extends PresenceActivity {
 
     private Toolbar mToolbar;
     private RecyclerView mUsersList;
