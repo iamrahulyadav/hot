@@ -49,18 +49,14 @@ public class MyApplication extends Application {
         if(mAuth.getCurrentUser() != null) {
 
             mUserDatabase = FirebaseDatabase.getInstance()
-                    .getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+                    .getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
             mUserDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                     if (dataSnapshot != null) {
-
                         mUserDatabase.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
-
                     }
-
                 }
 
                 @Override
@@ -68,9 +64,7 @@ public class MyApplication extends Application {
 
                 }
             });
-
         }
-
         super.onCreate();
         instance = this;
     }

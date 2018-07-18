@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
+import com.hotactress.hot.adapters.UserListAdapter;
 import com.hotactress.hot.models.UserProfile;
 import com.hotactress.hot.utils.Gen;
 
@@ -26,6 +27,8 @@ public class ChangeStatusActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private EditText mStatus;
     private Button mUpdate;
+    private static final String TAG = ChangeStatusActivity.class.getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FriendsFragment extends Fragment {
 
     private RecyclerView mFriendsList;
+    private static final String TAG = FriendsFragment.class.getSimpleName();
 
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mUsersDatabase;
@@ -65,11 +67,11 @@ public class FriendsFragment extends Fragment {
 
         mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friend").child(mCurrent_user_id);
         mFriendsDatabase.keepSynced(true);
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         mUsersDatabase.keepSynced(true);
 
         friendList = new ArrayList<>();
-        friendsAdapter = new FriendsAdapter(friendList);
+        friendsAdapter = new FriendsAdapter(friendList, getActivity());
 
         mFriendsList.setHasFixedSize(true);
         mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -79,20 +81,27 @@ public class FriendsFragment extends Fragment {
         mFriendsDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Friend> newFriendList = new ArrayList<>();
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    String friendKey = child.getKey();
+                    Friend friend = child.getValue(Friend.class);
+                    friend.setId(friendKey);
+                    newFriendList.add(friend);
+                }
 
+                // notify data change
+                friendList.removeAll(friendList);
+                friendList.addAll(newFriendList);
+                friendsAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.d(TAG, databaseError.getMessage());
             }
         });
-
 
         // Inflate the layout for this fragment
         return mMainView;
     }
-
-
-
 }

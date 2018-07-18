@@ -48,7 +48,7 @@ public class ChatMainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Hot Chat");
 
         if (mAuth.getCurrentUser() != null) {
-            mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
         }
 
         //Tabs

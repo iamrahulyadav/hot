@@ -37,7 +37,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             default:
                 return  null;
         }
-
     }
 
     @Override
