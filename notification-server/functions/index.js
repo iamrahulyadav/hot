@@ -10,35 +10,28 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
 
-/*
- * 'OnWrite' works as 'addValueEventListener' for android. It will fire the function
- * everytime there is some item added, removed or changed from the provided 'database.ref'
- * 'sendNotification' is the name of the function, which can be changed according to
- * your requirement
- */
-
  exports.notify = functions.https.onCall((data, context) => {
     console.log("data is ", data);
-    const {userId, name} = data;
+    const {userId, message, title} = data;
 
     console.log("userId is ", userId);
 
     const deviceToken = admin.database().ref(`/users/${userId}/deviceToken`).once('value');
 
-    devicetoken.then(token_id => {
+    deviceToken.then(result => {
+
+        const token_id = result.val();
+
+        console.log("device token_id is ", token_id);
 
         const payload = {
-                notification: {
-                  title : "New message",
-                  body: `You have new message from ${name}`,
-                  icon: "default",
-                  click_action : "com.hotactress.hot.activities.StartActivity"
-                },
                 data : {
-                  from_user_id: null
+                  title : title,
+                  message: message
                 }
               };
 
+         console.log("notification payload is: ", payload);
 
               return admin.messaging().sendToDevice(token_id, payload).then(response => {
 
@@ -46,91 +39,4 @@ admin.initializeApp(functions.config().firebase);
 
               });
     });
-
-
   });
-
-
-exports.sendNotification = functions.database.ref('/notifications/{user_id}/{notification_id}').onWrite((snapshot, event) => {
-
-
-  /*
-   * You can store values as variables from the 'database.ref'
-   * Just like here, I've done for 'user_id' and 'notification'
-   */
-
-  const user_id = event.params.user_id;
-  const notification_id = event.params.notification_id;
-
-  console.log('We have a notification from : ', user_id);
-
-  /*
-   * Stops proceeding to the rest of the function if the entry is deleted from database.
-   * If you want to work with what should happen when an entry is deleted, you can replace the
-   * line from "return console.log.... "
-   */
-
-//  if(!snapshot.val()){
-//
-//    return console.log('A Notification has been deleted from the database : ', notification_id);
-//
-//  }
-
-  /*
-   * 'fromUser' query retreives the ID of the user who sent the notification
-   */
-
-  const fromUser = admin.database().ref(`/notifications/${user_id}/${notification_id}`).once('value');
-
-  return fromUser.then(fromUserResult => {
-
-    const from_user_id = fromUserResult.val().from;
-
-    console.log('You have new notification from  : ', from_user_id);
-
-    /*
-     * The we run two queries at a time using Firebase 'Promise'.
-     * One to get the name of the user who sent the notification
-     * another one to get the devicetoken to the device we want to send notification to
-     */
-
-    const userQuery = admin.database().ref(`users/${from_user_id}/name`).once('value');
-    const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
-
-    return Promise.all([userQuery, deviceToken]).then(result => {
-
-      const userName = result[0].val();
-      const token_id = result[1].val();
-
-      /*
-       * We are creating a 'payload' to create a notification to be sent.
-       */
-
-      const payload = {
-        notification: {
-          title : "New Friend Request",
-          body: `${userName} has sent you request`,
-          icon: "default",
-          click_action : "com.hotactress.hot.lapitchat_TARGET_NOTIFICATION"
-        },
-        data : {
-          from_user_id: from_user_id
-        }
-      };
-
-      /*
-       * Then using admin.messaging() we are sending the payload notification to the token_id of
-       * the device we retrieved.
-       */
-
-      return admin.messaging().sendToDevice(token_id, payload).then(response => {
-
-        console.log('This was the notification Feature');
-
-      });
-
-    });
-
-  });
-
-});

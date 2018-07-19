@@ -78,9 +78,11 @@ public class Gen {
 
     private static FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
 
-    public static void sendNotification(String userId) {
+    public static void sendNotification(String userId, String title, String message) {
         Map<String, Object> data = new HashMap<>();
         data.put("userId", userId);
+        data.put("title", title);
+        data.put("message", message);
 
         Task<String> notificationTask = mFunctions
                 .getHttpsCallable("notify")
@@ -108,7 +110,6 @@ public class Gen {
                     }
                 } else {
                     Log.d(TAG, "notification sent successfully");
-                    Log.d(TAG, task.getResult());
                 }
             }
         });

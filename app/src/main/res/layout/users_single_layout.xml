@@ -22,7 +22,9 @@
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@+id/user_single_image"
         android:text="Display Name"
-        android:textSize="18sp" />
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/user_single_status"
