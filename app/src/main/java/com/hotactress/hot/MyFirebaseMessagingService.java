@@ -73,7 +73,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
             final String packageName = getPackageName();
-            Uri uri = Uri.parse("android.resource://" + packageName + "/raw/success_sound.mp3");
+//            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Uri uri = Uri.parse(
+                    "android.resource://"
+                            + getPackageName()
+                            + "/"
+                            + R.raw.success_sound
+            );
+
 
 
             final NotificationCompat.Builder builder = new  NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)

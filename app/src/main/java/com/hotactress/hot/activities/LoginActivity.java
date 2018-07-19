@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hotactress.hot.R;
+import com.hotactress.hot.utils.FirebaseUtil;
 import com.hotactress.hot.utils.Gen;
 
 import org.w3c.dom.Text;
@@ -73,7 +76,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Gen.hideLoader(activity);
                 if(task.isSuccessful()) {
-                    Gen.startActivity(activity, true, ChatMainActivity.class);
+                    String current_user_id = mAuth.getCurrentUser().getUid();
+                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+                    FirebaseUtil.getUsersRefForUser(current_user_id).child("deviceToken").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Gen.startActivity(activity, true, ChatMainActivity.class);
+                        }
+                    });
+
                 } else {
                     Gen.toast("Something went wrong while login the user");
                 }
