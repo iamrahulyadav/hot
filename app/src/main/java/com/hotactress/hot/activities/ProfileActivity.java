@@ -170,6 +170,7 @@ public class ProfileActivity extends PresenceActivity {
             @Override
             public void onClick(View view) {
 
+                Gen.sendNotification(user_id, "You have some updates", "Someone has visited your profile. Check it out.");
                 mProfileSendReqBtn.setEnabled(false);
 
                 // --------------- NOT FRIENDS STATE ------------

@@ -466,7 +466,7 @@ public class ChatActivity extends PresenceActivity {
                 }
             });
 
-            Gen.sendNotification(mChatUser);
+            Gen.sendNotification(mChatUser, "You have new message", "You have received new message(s), check it out.");
         }
     }
 
