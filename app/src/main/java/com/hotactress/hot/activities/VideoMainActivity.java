@@ -13,22 +13,35 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.arasthel.asyncjob.AsyncJob;
+import com.hotactress.hot.Config;
 import com.hotactress.hot.R;
 import com.hotactress.hot.fragments.VideoDownloadFragment;
 import com.hotactress.hot.fragments.VideoHomeFragment;
 import com.hotactress.hot.fragments.VideoSearchFragment;
+import com.hotactress.hot.models.Format;
 import com.hotactress.hot.models.Video;
 import com.hotactress.hot.utils.Gen;
+import com.hotactress.hot.utils.VolleySingelton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import at.huber.youtubeExtractor.Format;
 import at.huber.youtubeExtractor.VideoMeta;
 import at.huber.youtubeExtractor.YouTubeExtractor;
 import at.huber.youtubeExtractor.YtFile;
@@ -38,7 +51,7 @@ import butterknife.Unbinder;
 
 public class VideoMainActivity extends AppCompatActivity implements
         BottomNavigationView.OnNavigationItemSelectedListener,
-VideoHomeFragment.VideoSelected{
+        VideoHomeFragment.VideoSelected {
 
 
     @Nullable
@@ -54,13 +67,11 @@ VideoHomeFragment.VideoSelected{
     public static int DOWNLOAD_FRAGMENT_TAG = 2000;
     public static int HOME_FRAGMENT_TAG = 30000;
     public static int STORY_LISTING_FRAGMENT_TAG = 40000;
-    public List<String> videoDownloadOptions;
     public AlertDialog.Builder builder;
     public VideoHomeFragment videoHomeFragment;
     public VideoDownloadFragment videoDownloadFragment;
     public VideoSearchFragment videoSearchFragment;
-
-
+    public final HashMap<Integer, Format> formatHashMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,77 +153,71 @@ VideoHomeFragment.VideoSelected{
         return false;
     }
 
-//    @Override
-//    public void sendCategorySelected(String category) {
-//        addFragmentOnHomeActivity(new StoryListFragment(), STORY_LISTING_FRAGMENT_TAG);
-//        ((TextView)findViewById(R.id.custom_toolbar_text_view_id)).setText(category);
-//    }
-
-    public static String showReadableVideoFormat(Format format) {
-        // 720p 3gp
-        if (format.getHeight() > 0 &&
-                (format.getExt().equals("mp4") || format.getExt().equals("3gp"))
-                && format.getAudioBitrate() > 0) {
-            return String.format("%sp  %s", format.getHeight(), format.getExt());
-        } else {
-            return null;
+    public void startVideoPlay(Format format) {
+        String type = "";
+        if (format.getHeight() < 0) {
+            type = "video/mp4";
+            Intent playVideo = new Intent(Intent.ACTION_VIEW);
+            playVideo.setDataAndType(Uri.parse(format.getUrl()), type);
+            startActivity(playVideo);
         }
-    }
-
-    public void startVideoPlay(String url) {
-        Intent playVideo = new Intent(Intent.ACTION_VIEW);
-        playVideo.setDataAndType(Uri.parse(url), "video/mp4");
-        startActivity(playVideo);
     }
 
     public static void extractVideoQualities(final VideoMainActivity activity, final String youtubeUrl) {
         Gen.showLoader(activity);
-        new YouTubeExtractor(activity) {
-            @Override
-            public void onExtractionComplete(final SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
+        RequestQueue requestQueue = VolleySingelton.getInstance().getRequestQueue();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("video_url", youtubeUrl);
 
-                activity.videoDownloadOptions = new ArrayList<>();
-                final HashMap<Integer, Integer> map = new HashMap<>();
-                for (int i = 0, j=0; ytFiles!=null && i < ytFiles.size(); i++) {
-                    int key = ytFiles.keyAt(i);
-                    Format format = ytFiles.get(key).getFormat();
-                    String readbleFormat = showReadableVideoFormat(format);
-                    if (readbleFormat != null) {
-                        activity.videoDownloadOptions.add(readbleFormat);
-                        map.put(j, i);
-                        j++;
-                    }
-                }
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Config.VIDEO_META_URL, jsonObject, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Gen.hideLoader(activity);
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("data");
+                        List<Format> formatList = Format.createFormatForYoutube(jsonArray);
 
-                AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
-                    @Override
-                    public void doInUIThread() {
-                        Gen.hideLoader(activity);
-                        if (activity.videoDownloadOptions.size()>0) {
-                            CharSequence[] options = activity.videoDownloadOptions.toArray(new CharSequence[activity.videoDownloadOptions.size()]);
-                            activity.builder.setItems(options, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    int index = map.get(which);
-                                    YtFile ytFile = ytFiles.valueAt(index);
-                                    activity.startVideoPlay(ytFile.getUrl());
-                                }
-                            });
-                            activity.builder.show();
-                        }else {
-                            Gen.toast(String.format("Issue with %s", youtubeUrl));
+                        Log.d("", formatList.size() + "");
+                        List<String> selectVideoFormatOptions = new ArrayList<>();
+                        for (int i = 0, j = 0; i < formatList.size(); i++) {
+                            if (formatList.get(i).isValid()) {
+                                selectVideoFormatOptions.add(formatList.get(i).displayString());
+                                activity.formatHashMap.put(j, formatList.get(i));
+                                j++;
+                            }
                         }
+                        CharSequence[] options = selectVideoFormatOptions.toArray(new CharSequence[selectVideoFormatOptions.size()]);
+                        activity.builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Format format = activity.formatHashMap.get(which);
+                                activity.startVideoPlay(format);
+                            }
+                        });
+                        activity.builder.show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                });
-            }
 
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Gen.hideLoader(activity);
+                    Log.e("", error.getMessage(), error);
+                }
+            });
+            requestQueue.add(request);
 
-        }.extract(youtubeUrl, true, true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void videoSelected(Video video) {
-        extractVideoQualities(this, video.youtubeUrl() );
+        extractVideoQualities(this, video.youtubeUrl());
     }
 }
