@@ -390,4 +390,15 @@ public class Gen {
         }
     }
 
+    public static String getYoutubeUrlForId(String videoId) {
+        return String.format("https://youtube.com/watch?v=%s", videoId);
+    }
+
+    public static String[] getYoutubeCaptionUrls(String videoId){
+        String img1 = String.format("https://img.youtube.com/vi/%s/0.jpg", videoId);
+        String img2 = String.format("https://img.youtube.com/vi/%s/1.jpg", videoId);
+        String img3 = String.format("https://img.youtube.com/vi/%s/2.jpg", videoId);
+        String img4 = String.format("https://img.youtube.com/vi/%s/3.jpg", videoId);
+        return new String[]{img1, img2, img3, img4};
+    }
 }
