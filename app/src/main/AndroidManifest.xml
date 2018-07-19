@@ -17,6 +17,12 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".activities.MainActivity"></activity>
         <activity android:name=".activities.PuzzleSolvingActivity"></activity>
+        <activity android:name=".activities.VideoMainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.GridActivity"
             android:screenOrientation="portrait"
@@ -43,11 +49,6 @@
         <activity
             android:name=".activities.StartActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity

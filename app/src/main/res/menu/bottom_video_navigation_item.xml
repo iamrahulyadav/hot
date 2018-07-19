@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_video_navigation_home"
+        android:icon="@drawable/home"
+        android:title="@string/home_option"/>
+
+    <item
+        android:id="@+id/bottom_video_navigation_search"
+        android:icon="@drawable/search"
+        android:title="@string/search_option"/>
+
+    <item
+        android:id="@+id/bottom_video_navigation_downloads"
+        android:icon="@drawable/favourite"
+        android:title="@string/favourite_option"/>
+
+</menu>

@@ -9,4 +9,18 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlueDark">#032160</color>
     <color name="transparentColor">#00FFFFFF</color>
+
+    <!--  Video specific  -->
+    <color name="videoColorPrimary">#000000</color>
+    <color name="videoColorPrimaryDark">#1a1a1a</color>
+    <color name="videoColorCardBackgroundBlack">#292929</color>
+    <color name="videoColorAccent">#d3d3d3</color>
+    <color name="videoColorWhiteBackground">#f7f7f7</color>
+    <color name="colorWhiteBackground">#f7f7f7</color>
+    <color name="titleTextColor">#343434</color>
+    <color name="descriptionTextColor">#595959</color>
+    <color name="whiteTitleTextColor">#E6E6E6</color>
+    <color name="whiteDescriptionTextColor">#abaaaa</color>
+    <color name="darkBlueTextColor">#105BFB</color>
+
 </resources>

@@ -2,6 +2,7 @@ package com.hotactress.hot.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,12 +27,12 @@ import at.huber.youtubeExtractor.YtFile;
 
 public class YoutubeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public Button downLoadButton ;
+    public Button downLoadButton;
     public String currentVideoId;
     public String videoId = "OOQlCD5qMPY";
     List<String> videoDownloadOptions = new ArrayList<>();
     public AlertDialog.Builder builder;
-    public VideoView videoView ;
+    public VideoView videoView;
     public MediaController mediacontroller;
 
     @Override
@@ -57,20 +58,20 @@ public class YoutubeActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(final View v) {
-        if (v.getId() == R.id.youtube_activity_download_button_id){
+        if (v.getId() == R.id.youtube_activity_download_button_id) {
             String url = Gen.getYoutubeUrlForId(videoId);
             extractVideoQualities(this, url);
 
         }
     }
 
-    public static void extractVideoQualities(final YoutubeActivity activity, final String youtubeUrl){
+    public static void extractVideoQualities(final YoutubeActivity activity, final String youtubeUrl) {
         new YouTubeExtractor(activity) {
             @Override
             public void onExtractionComplete(final SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
 
                 activity.videoDownloadOptions = new ArrayList<>();
-                for (int i = 0 ; i < ytFiles.size() ; i++){
+                for (int i = 0; i < ytFiles.size(); i++) {
                     int key = ytFiles.keyAt(i);
                     Format format = ytFiles.get(key).getFormat();
                     String readbleFormat = showReadableVideoFormat(format);
@@ -82,12 +83,12 @@ public class YoutubeActivity extends AppCompatActivity implements View.OnClickLi
                 AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                     @Override
                     public void doInUIThread() {
-                        CharSequence []options = activity.videoDownloadOptions.toArray(new CharSequence[activity.videoDownloadOptions.size()]);
+                        CharSequence[] options = activity.videoDownloadOptions.toArray(new CharSequence[activity.videoDownloadOptions.size()]);
                         activity.builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 YtFile ytFile = ytFiles.valueAt(which);
-                                activity.startVideoPlay( ytFile.getUrl());
+                                activity.startVideoPlay(ytFile.getUrl());
                             }
                         });
                         activity.builder.show();
@@ -98,21 +99,18 @@ public class YoutubeActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public void startVideoPlay(String url){
-        Uri uri = Uri.parse(url);
-        videoView.setVideoURI(uri);
-        videoView.requestFocus();
-        videoView.start();
+    public void startVideoPlay(String url) {
+        Intent playVideo = new Intent(Intent.ACTION_VIEW);
+        playVideo.setDataAndType(Uri.parse(url), "video/mp4");
+        startActivity(playVideo);
     }
 
-    public static String showReadableVideoFormat(Format format ){
-
+    public static String showReadableVideoFormat(Format format) {
         // 720p 3gp
-        if (format.getHeight() > 0){
+        if (format.getHeight() > 0 && (format.getExt().equals("mp4") || format.getExt().equals("3gp"))) {
             return String.format("%sp  %s", format.getHeight(), format.getExt());
-        }else {
+        } else {
             return null;
         }
-
-    };
+    }
 }
