@@ -9,65 +9,79 @@
     tools:context="com.hotactress.hot.activities.RegisterActivity"
     >
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:id="@+id/register_logo"
-        android:layout_marginTop="@dimen/margin_top_big"
-        android:layout_marginBottom="@dimen/margin_bottom"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_launcher"/>
-
-    <android.support.design.widget.TextInputEditText
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_display_name"
-        android:hint="Enter display name"
-        android:layout_marginTop="@dimen/margin_top"
-        android:layout_marginBottom="@dimen/margin_bottom"
-        android:layout_below="@id/register_logo"
-        android:inputType="text"
-        />
+        android:fillViewport="true"
+        android:layout_height="match_parent">
 
-    <android.support.design.widget.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_email"
-        android:hint="Enter email address"
-        android:layout_below="@id/register_display_name"
-        android:layout_marginBottom="@dimen/margin_bottom"
-        android:inputType="textEmailAddress"
-        />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <android.support.design.widget.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_password"
-        android:hint="Enter password"
-        android:layout_below="@id/register_email"
-        android:layout_marginBottom="@dimen/margin_bottom"
-        android:inputType="textPassword"
-        />
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:id="@+id/register_logo"
+                android:layout_marginTop="@dimen/margin_top_big"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_launcher"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Up"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_below="@id/register_password"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/margin_bottom"
-        android:id="@+id/register_sign_up"/>
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_display_name"
+                android:hint="Enter display name"
+                android:layout_marginTop="@dimen/margin_top"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:layout_below="@id/register_logo"
+                android:inputType="text"
+                />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/LinkButton"
-        android:id="@+id/register_login_link"
-        android:text="Already have account? login here"
-        android:layout_below="@id/register_sign_up"
-        android:layout_marginTop="@dimen/margin_top"
-        android:layout_centerHorizontal="true"
-        />
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_email"
+                android:hint="Enter email address"
+                android:layout_below="@id/register_display_name"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:inputType="textEmailAddress"
+                />
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_password"
+                android:hint="Enter password"
+                android:layout_below="@id/register_email"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:inputType="textPassword"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_below="@id/register_password"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:id="@+id/register_sign_up"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/LinkButton"
+                android:id="@+id/register_login_link"
+                android:text="Already have account? login here"
+                android:layout_below="@id/register_sign_up"
+                android:layout_marginTop="@dimen/margin_top"
+                android:layout_centerHorizontal="true"
+                />
+
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

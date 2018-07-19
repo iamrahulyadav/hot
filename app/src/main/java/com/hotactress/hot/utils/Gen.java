@@ -79,6 +79,8 @@ public class Gen {
     private static FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
 
     public static void sendNotification(String userId, String title, String message) {
+
+        // TODO: if already sent in past one hour, don't send the notification
         Map<String, Object> data = new HashMap<>();
         data.put("userId", userId);
         data.put("title", title);
