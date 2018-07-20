@@ -1,6 +1,7 @@
 package com.hotactress.hot.adapters;
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -268,11 +269,13 @@ public class MessageAdapter extends RecyclerView.Adapter{
             if (message.getType().equals("text")){
                 imagePlaceHolderLayout.setVisibility(View.GONE);
             }else{
+                DisplayMetrics dis = new DisplayMetrics();
+                activity.getWindowManager().getDefaultDisplay().getMetrics(dis);
+                int width = dis.widthPixels;
                 messageText.setVisibility(View.GONE);
                 imagePlaceHolderLayout.setVisibility(View.VISIBLE);
-                int width = imagePlaceHolderLayout.getMeasuredWidth();
                 ViewGroup.LayoutParams layoutParams = imagePlaceHolderLayout.getLayoutParams();
-                layoutParams.width = layoutParams.height = width;
+                layoutParams.height = width - 100;
                 imagePlaceHolderLayout.setLayoutParams(layoutParams);
 
 
