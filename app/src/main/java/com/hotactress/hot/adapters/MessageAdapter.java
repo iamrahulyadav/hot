@@ -214,9 +214,13 @@ public class MessageAdapter extends RecyclerView.Adapter{
             }else{
                 messageText.setVisibility(View.GONE);
                 imagePlaceHolderLayout.setVisibility(View.VISIBLE);
-                int width = imagePlaceHolderLayout.getMeasuredWidth();
+                DisplayMetrics dis = new DisplayMetrics();
+                activity.getWindowManager().getDefaultDisplay().getMetrics(dis);
+                int width = dis.widthPixels;
+                messageText.setVisibility(View.GONE);
+                imagePlaceHolderLayout.setVisibility(View.VISIBLE);
                 ViewGroup.LayoutParams layoutParams = imagePlaceHolderLayout.getLayoutParams();
-                layoutParams.width = layoutParams.height = width;
+                layoutParams.height = width - 100;
                 imagePlaceHolderLayout.setLayoutParams(layoutParams);
 
                 Picasso.get().load(message.getMessage()).networkPolicy(NetworkPolicy.OFFLINE)

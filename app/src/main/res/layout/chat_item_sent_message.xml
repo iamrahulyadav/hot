@@ -33,7 +33,7 @@
     <LinearLayout
         android:id="@+id/chat_item_sent_image_layout_id"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="80dp"
         android:layout_marginTop="8dp"
@@ -48,7 +48,9 @@
             android:id="@+id/chat_item_sent_image_view_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:layout_margin="2dp"
+            android:background="@drawable/my_image"
             android:scaleType="fitXY" />
     </LinearLayout>
 

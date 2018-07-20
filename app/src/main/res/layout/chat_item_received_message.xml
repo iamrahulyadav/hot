@@ -54,7 +54,7 @@
     <LinearLayout
         android:id="@+id/chat_item_received_image_layout_id"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginEnd="80dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -69,7 +69,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:scaleType="fitXY" />
+            android:layout_gravity="left"
+            android:background="@drawable/my_image"
+            android:scaleType="fitCenter" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
