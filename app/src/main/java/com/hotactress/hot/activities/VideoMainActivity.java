@@ -155,7 +155,7 @@ public class VideoMainActivity extends AppCompatActivity implements
 
     public void startVideoPlay(Format format) {
         String type = "";
-        if (format.getHeight() < 0) {
+        if (format.getHeight() > 0) {
             type = "video/mp4";
             Intent playVideo = new Intent(Intent.ACTION_VIEW);
             playVideo.setDataAndType(Uri.parse(format.getUrl()), type);
@@ -181,7 +181,7 @@ public class VideoMainActivity extends AppCompatActivity implements
                         Log.d("", formatList.size() + "");
                         List<String> selectVideoFormatOptions = new ArrayList<>();
                         for (int i = 0, j = 0; i < formatList.size(); i++) {
-                            if (formatList.get(i).isValid()) {
+                            if (formatList.get(i).isValidVideo()) {
                                 selectVideoFormatOptions.add(formatList.get(i).displayString());
                                 activity.formatHashMap.put(j, formatList.get(i));
                                 j++;

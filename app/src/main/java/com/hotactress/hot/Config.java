@@ -6,7 +6,7 @@ public class Config {
     private static Config instance;
     public static final String YOUTUBE_API_KEY="AIzaSyAAHawn3ItAopDRDqdHIOyUykCHZ1XWD1k";
     public static final String APP_HOME_DOWNLOAD_DIR = Environment.getExternalStorageDirectory().getPath() + "Download/HotApp";
-    public static final String VIDEO_META_URL = "https://d3c19b15.ngrok.io/api/v1/urls/format";
+    public static final String VIDEO_META_URL = "https://videoapis.lolmenow.com//api/v1/urls/format";
 
     private Config(){
 

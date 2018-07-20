@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +18,11 @@ public class Format {
     String url;
     String ext;
     Integer audioBitRate;
-    Integer fileSize;
+    BigInteger fileSize;
     Integer height;
     String formatNote;
 
-    public Format(Source source, String url, String ext, Integer audioBitRate, Integer fileSize, Integer height, String formatNote, String format) {
+    public Format(Source source, String url, String ext, Integer audioBitRate, BigInteger fileSize, Integer height, String formatNote, String format) {
         this.source = source;
         this.url = url;
         this.ext = ext;
@@ -47,7 +48,7 @@ public class Format {
                 String url = jsonObject.has("url") ? jsonObject.getString("url"): null;
                 String ext = jsonObject.has("ext") ? jsonObject.getString("ext"): null;
                 Integer audioBitRate = jsonObject.has("abr") ? jsonObject.getInt("abr"): -1;
-                Integer fileSize = jsonObject.has("1163506395") ? jsonObject.getInt("1163506395"): -1;
+                BigInteger fileSize = new BigInteger(jsonObject.has("filesize") ? jsonObject.getString("filesize"): "-1");
                 Integer height = jsonObject.has("height") ? jsonObject.getInt("height"): -1;
                 String formatNote = jsonObject.has("format_note") ? jsonObject.getString("format_note"): null;
                 String format = jsonObject.has("format") ?  jsonObject.getString("format"): null;
@@ -65,11 +66,27 @@ public class Format {
         return url != null && audioBitRate > 0;
     }
 
+    public Boolean isValidVideo() { return isValid() && height > 0; };
+
     public String displayString(){
         if (source == Source.YOUTUBE){
-            return format;
+//            return format;
+            return String.format("%sp %s  ~%s", height, ext, readableFileSize());
         }
-        return String.format("%sp %s", height, ext);
+        return String.format("%sp %s  ~%s", height, ext, readableFileSize());
+    }
+
+    public String readableFileSize(){
+
+        if (fileSize.compareTo(BigInteger.ONE) < 0)
+            return "";
+        if (fileSize.compareTo(BigInteger.valueOf(1000)) < 0)
+            return String.format("%s B", fileSize.divide(BigInteger.valueOf(8)).intValue());
+        else if (fileSize.compareTo(BigInteger.valueOf(1000)) > 0 && fileSize.compareTo(BigInteger.valueOf(1000000)) < 0)
+            return String.format("%s KB", fileSize.divide(BigInteger.valueOf(8000)));
+        else if (fileSize.compareTo(BigInteger.valueOf(1000000)) > 0 && fileSize.compareTo(BigInteger.valueOf(1000000000)) < 0)
+            return String.format("%s MB", fileSize.divide(BigInteger.valueOf(8000000)));
+        else return String.format("%s GB", fileSize.divide(new BigInteger("8000000000")));
     }
 
 }
