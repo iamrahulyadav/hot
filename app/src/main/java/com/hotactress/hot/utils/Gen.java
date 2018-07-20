@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,6 +35,11 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.firebase.functions.HttpsCallableResult;
@@ -70,6 +76,9 @@ public class Gen {
             "Solve the puzzle of hot chicks and stand a chance to win a prize. Try if you are intelligent\n" +
             "\n" +
             "APP LINK: http://bit.ly/2uaTAE5";
+
+    static String shareAppMessage = "इस app पर बहुत सारी हॉट लड़किया है जिससे आप chat कर सकते है. \n" +
+            "मेरी referral link से डाउनलोड करिये ";
 
 
     public static String utmQueryUrl = "?utm_source=hot%20app&utm_medium=webview&utm_campaign=hot%20app";
@@ -180,6 +189,33 @@ public class Gen {
 
     public static void shareImageWhatsapp(Activity context, String url) {
         shareImage(context, url, "com.whatsapp");
+    }
+
+    public static void shareApp(Activity activity) {
+        String invitationLink = Gen.getInviteURLFromLocalStorage();
+        String msg = shareAppMessage + invitationLink;
+
+        Bitmap bm = BitmapFactory.decodeResource(activity.getResources(), R.mipmap.share_image);
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "title");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        Uri uri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                values);
+        OutputStream outstream;
+        try {
+            outstream = activity.getContentResolver().openOutputStream(uri);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, outstream);
+            outstream.close();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        share.putExtra(Intent.EXTRA_TEXT, msg);
+        Gen.startActivity(Intent.createChooser(share, "Share app"), false);
     }
 
     public static void downloadImage(final Activity activity, final int imageViewId, final String imageName) {
@@ -392,4 +428,61 @@ public class Gen {
         }
     }
 
+    public static void saveInviteURLToLocalStorage(Activity activity) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Gen.validatePermission(activity))
+                Gen.askPermission(activity);
+        }
+
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+        String link = "https://lolmenow.com/?" + Constants.INVITED_BY + "=" + uid;
+
+        DynamicLink.Builder dynamicLinkBuilder = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse(link))
+                .setDynamicLinkDomain("lolmenow.page.link")
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder("com.hotactress.hot")
+                                .setMinimumVersion(1)
+                                .build());
+
+
+        dynamicLinkBuilder
+                .buildShortDynamicLink()
+                .addOnCompleteListener(new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+
+                        if(task.isSuccessful()) {
+                            String inviteUrlForUser = task.getResult().getShortLink().toString();
+                            SharedPreferences settings = MyApplication.getAppContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString(Constants.INVITE_URL_FOR_USER, inviteUrlForUser);
+                            editor.commit();
+                        } else {
+                            Exception e = task.getException();
+                            Log.d(TAG, e.getStackTrace().toString());
+                            Gen.toast("Error saving invite URL");
+                        }
+                    }
+                });
+    }
+
+    public static String getInviteURLFromLocalStorage() {
+        SharedPreferences settings = MyApplication.getAppContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+        return settings.getString(Constants.INVITE_URL_FOR_USER, "");
+    }
+
+    public static void saveInvitedByUserToLocalStorage(String invitedByUserId) {
+        SharedPreferences settings = MyApplication.getAppContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(Constants.INVITED_BY, invitedByUserId);
+    }
+
+    public static String getInvitedByUserFromLocalStorage() {
+        SharedPreferences settings = MyApplication.getAppContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+        return settings.getString(Constants.INVITED_BY, "");
+    }
 }

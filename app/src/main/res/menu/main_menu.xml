@@ -6,6 +6,9 @@
         android:id="@+id/account_settings"
         android:title="@string/account_settings" />
     <item
+        android:id="@+id/share_app"
+        android:title="@string/share_app" />
+    <item
         android:id="@+id/all_users"
         android:title="@string/all_users" />
     <item

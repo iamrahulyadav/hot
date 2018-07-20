@@ -47,9 +47,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/settings_change_image"
-        android:backgroundTint="@color/colorAccent"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
         android:text="CHANGE STATUS" />
+
+    <Button
+        android:id="@+id/settings_share_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settings_change_status"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:text="SHARE APP" />
 
 </RelativeLayout>

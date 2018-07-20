@@ -5,4 +5,10 @@
     <string name="account_settings">Account Settings</string>
     <string name="solve_mystry">Solve mystry</string>
     <string name="hot_pics">Hot pics</string>
+    <string name="invitation_title">Invitation title</string>
+    <string name="invitation_message">this is invitation message</string>
+    <string name="invitation_cta">call to action</string>
+    <string name="invitation_custom_image">https://lh3.googleusercontent.com/rwJXzv1HjIfBSLfJW5MFXFK7ioF7I5hBUXvVTvJhtFvXH94x1nRIa1--pRDHKADu8A=s360-rw</string>
+    <string name="invitation_deep_link">lolmenow.page.link</string>
+    <string name="share_app">Share app</string>
 </resources>

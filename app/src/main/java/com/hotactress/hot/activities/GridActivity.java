@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.helpers.PermissionActivity;
 import com.hotactress.hot.adapters.GridAdapter;
 import com.hotactress.hot.adapters.ImageViewPagerAdapter;
 import com.hotactress.hot.models.Profile;
@@ -42,7 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class GridActivity extends AppCompatActivity implements View.OnClickListener {
+public class GridActivity extends PermissionActivity implements View.OnClickListener {
 
     private static final String TAG = "GridActivity";
 
@@ -194,20 +195,6 @@ public class GridActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                     Gen.toast("Permission Granted!");
-                } else {
-                     Gen.toast("Permission Denied!");
-                    // re-request permission
-                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                }
-                break;
-        }
-    }
 
     public void loadUrlAsync(WebView webView, List<String> urls){
         Collections.shuffle(urls);

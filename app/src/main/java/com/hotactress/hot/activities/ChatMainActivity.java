@@ -101,6 +101,8 @@ public class ChatMainActivity extends PresenceActivity {
             Gen.startActivity(this, false, GridActivity.class);
         } else if(item.getItemId() == R.id.play_game) {
             Gen.startActivity(this, false, PuzzleSolvingActivity.class);
+        } else if(item.getItemId() == R.id.share_app) {
+            Gen.startActivity(this, false, SettingsActivity.class);
         }
 
         return true;

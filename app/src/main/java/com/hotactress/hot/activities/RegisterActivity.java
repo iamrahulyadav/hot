@@ -94,7 +94,12 @@ public class RegisterActivity extends AppCompatActivity {
                     userProfile.setImage("default");
                     userProfile.setDeviceToken(deviceToken);
 
+                    Gen.saveInviteURLToLocalStorage(activity);
+
                     myRef.setValue(userProfile);
+
+                    String invitedByUserId = Gen.getInvitedByUserFromLocalStorage();
+
 
                     Gen.startActivity(activity, true, ChatMainActivity.class);
                 } else {

@@ -6,6 +6,7 @@ android {
         applicationId "com.hotactress.hot"
         minSdkVersion 19
         targetSdkVersion 27
+        multiDexEnabled true
         versionCode 12
         versionCode 11
         versionName "1.12"
@@ -32,6 +33,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crash:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
+    implementation 'com.google.firebase:firebase-invites:16.0.1'
     compileOnly "org.projectlombok:lombok:1.18.0"
     annotationProcessor "org.projectlombok:lombok:1.18.0"
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -44,7 +46,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.arasthel:asyncjob-library:1.0.3'
     implementation group: 'com.github.javafaker', name: 'javafaker', version: '0.15'

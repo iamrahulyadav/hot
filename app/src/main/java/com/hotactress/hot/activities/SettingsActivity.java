@@ -27,6 +27,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.helpers.PermissionActivity;
 import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.models.UserProfile;
 import com.hotactress.hot.utils.Gen;
@@ -45,7 +46,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SettingsActivity extends PresenceActivity {
+public class SettingsActivity extends PermissionActivity {
 
     private static final String TAG = "SettingsActivity";
     private static final int GALLERY_PICK = 1;
@@ -85,6 +86,13 @@ public class SettingsActivity extends PresenceActivity {
         mProfileImage = findViewById(R.id.settings_image);
         mChangeStatus = findViewById(R.id.settings_change_status);
         mChangeImage = findViewById(R.id.settings_change_image);
+
+        findViewById(R.id.settings_share_app).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gen.shareApp(SettingsActivity.this);
+            }
+        });
 
         DatabaseReference myRef = database.getReference("users").child(uid);
         myRef.addValueEventListener(new ValueEventListener() {

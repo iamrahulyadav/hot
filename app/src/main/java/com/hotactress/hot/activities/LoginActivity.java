@@ -79,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
                     String current_user_id = mAuth.getCurrentUser().getUid();
                     String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
+                    Gen.saveInviteURLToLocalStorage(activity);
+
                     FirebaseUtil.getUsersRefForUser(current_user_id).child("deviceToken").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
