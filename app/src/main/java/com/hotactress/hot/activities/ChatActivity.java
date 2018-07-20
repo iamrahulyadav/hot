@@ -1,13 +1,13 @@
 package com.hotactress.hot.activities;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,9 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,11 +40,22 @@ import com.hotactress.hot.R;
 import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.adapters.MessageAdapter;
 import com.hotactress.hot.models.Messages;
-import com.hotactress.hot.utils.FirebaseUtil;
+import com.hotactress.hot.models.UserProfile;
 import com.hotactress.hot.utils.Gen;
 import com.hotactress.hot.utils.GetTimeAgo;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +67,7 @@ public class ChatActivity extends PresenceActivity {
 
     private String mChatUser;
     private Toolbar mChatToolbar;
+
 
     private static final String TAG = ChatActivity.class.getSimpleName();
 
@@ -116,6 +126,10 @@ public class ChatActivity extends PresenceActivity {
 
         mChatUser = getIntent().getStringExtra("user_id");
         String userName = getIntent().getStringExtra("user_name");
+        byte []b = getIntent().getByteArrayExtra("user_serialized");
+
+        UserProfile otherUser;
+        otherUser = SerializationUtils.deserialize(b);
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View action_bar_view = inflater.inflate(R.layout.chat_custom_bar, null);
@@ -132,7 +146,7 @@ public class ChatActivity extends PresenceActivity {
         mChatSendBtn = (ImageButton) findViewById(R.id.chat_send_btn);
         mChatMessageView = (EditText) findViewById(R.id.chat_message_view);
 
-        mAdapter = new MessageAdapter(messagesList, this);
+        mAdapter = new MessageAdapter(messagesList, this, mCurrentUserId, otherUser);
 
         mMessagesList = (RecyclerView) findViewById(R.id.messages_list);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.message_swipe_layout);
@@ -251,19 +265,33 @@ public class ChatActivity extends PresenceActivity {
             final String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
             final String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
 
-            DatabaseReference user_message_push = mRootRef.child("messages")
-                    .child(mCurrentUserId).child(mChatUser).push();
-
-            final String push_id = user_message_push.getKey();
+            final Long currentTimeInMillis = System.currentTimeMillis();
 
 
-            final StorageReference filepath = mImageStorage.child("message_images").child( push_id + ".jpg");
+            final StorageReference filepath = mImageStorage.child("message_images").child( currentTimeInMillis + ".jpg");
+            InputStream is = null;
+            Bitmap bitmap = null;
+            try {
+                is = getContentResolver().openInputStream(imageUri);
+                bitmap = BitmapFactory.decodeStream(is);
+                is.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            filepath.putFile(imageUri)
+            int height = bitmap.getHeight(), width = bitmap.getWidth();
+            double ratio = (height*1.0)/(width*1.0);
+            bitmap = Bitmap.createScaledBitmap(bitmap, 800, (int)(800*ratio), true );
+            final Activity activity = this;
+            Gen.showLoader(this);
+            filepath.putBytes(Gen.bitmapToByteArray(bitmap, 100))
                     .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                     if (!task.isSuccessful()) {
+                        Gen.hideLoader(activity);
                         throw task.getException();
                     }
 
@@ -277,18 +305,20 @@ public class ChatActivity extends PresenceActivity {
 
                     if(task.isSuccessful()){
 
+                        Gen.hideLoader(activity);
+
                         String download_url = task.getResult().toString();
 
                         Map messageMap = new HashMap();
                         messageMap.put("message", download_url);
                         messageMap.put("seen", false);
                         messageMap.put("type", "image");
-                        messageMap.put("time", ServerValue.TIMESTAMP);
+                        messageMap.put("time", currentTimeInMillis);
                         messageMap.put("from", mCurrentUserId);
 
                         Map messageUserMap = new HashMap();
-                        messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
-                        messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
+                        messageUserMap.put(current_user_ref + "/" + currentTimeInMillis, messageMap);
+                        messageUserMap.put(chat_user_ref + "/" + currentTimeInMillis, messageMap);
 
                         mChatMessageView.setText("");
 
@@ -316,7 +346,13 @@ public class ChatActivity extends PresenceActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                Messages message = dataSnapshot.getValue(Messages.class);
+                Messages message = null;
+                try {
+                     message = dataSnapshot.getValue(Messages.class);
+                }catch (Exception e){
+                    e.printStackTrace();
+
+                }
                 String messageKey = dataSnapshot.getKey();
 
                 if(!mPrevKey.equals(messageKey)){
@@ -373,7 +409,7 @@ public class ChatActivity extends PresenceActivity {
 
         DatabaseReference messageRef = mRootRef.child("messages").child(mCurrentUserId).child(mChatUser);
 
-        Query messageQuery = messageRef.limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
+        Query messageQuery = messageRef.orderByKey().limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
 
 
         messageQuery.addChildEventListener(new ChildEventListener() {
@@ -431,22 +467,19 @@ public class ChatActivity extends PresenceActivity {
 
             String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
             String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
+            Long currentTimeInMillis = System.currentTimeMillis();
 
-            DatabaseReference user_message_push = mRootRef.child("messages")
-                    .child(mCurrentUserId).child(mChatUser).push();
-
-            String push_id = user_message_push.getKey();
 
             Map messageMap = new HashMap();
             messageMap.put("message", message);
             messageMap.put("seen", false);
             messageMap.put("type", "text");
-            messageMap.put("time", ServerValue.TIMESTAMP);
+            messageMap.put("time", currentTimeInMillis);
             messageMap.put("from", mCurrentUserId);
 
             Map messageUserMap = new HashMap();
-            messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
-            messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
+            messageUserMap.put(current_user_ref + "/" + currentTimeInMillis, messageMap);
+            messageUserMap.put(chat_user_ref + "/" + currentTimeInMillis, messageMap);
 
             mChatMessageView.setText("");
 

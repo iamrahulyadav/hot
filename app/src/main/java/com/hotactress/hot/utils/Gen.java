@@ -5,9 +5,11 @@ import android.app.DownloadManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -507,5 +509,17 @@ public class Gen {
     public static String getInvitedByUserFromLocalStorage() {
         SharedPreferences settings = MyApplication.getAppContext().getSharedPreferences(Constants.PREFS_NAME, 0);
         return settings.getString(Constants.INVITED_BY, "");
+    }
+
+    public static String getRealPathFromURI( Uri contentUri) {
+        File file = new File(contentUri.getPath());//create path from uri
+        final String[] split = file.getPath().split(":");//split the path.
+        return split[1];//assign it to a string(your choice).
+    }
+
+    public static byte[] bitmapToByteArray(Bitmap bitmap, int quanlity){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,quanlity,stream);
+        return stream.toByteArray();
     }
 }

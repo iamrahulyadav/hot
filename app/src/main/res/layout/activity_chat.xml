@@ -29,7 +29,7 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,38 +41,52 @@
 
         <ImageButton
             android:id="@+id/chat_add_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:alpha="0.5"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:background="@android:color/white"
             android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_add_black_24dp" />
 
         <EditText
             android:id="@+id/chat_message_view"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
-            android:textColor="@color/colorAccent"
             android:hint="Enter Message..."
-            android:inputType="textPersonName"
             android:paddingBottom="12dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="14dp" />
+            android:paddingTop="14dp"
+            android:maxLines="1000"
+            android:inputType="textMultiLine"
+            android:textColor="@color/colorAccent"
+            android:imeOptions="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/chat_send_btn"
+            app:layout_constraintStart_toEndOf="@+id/chat_add_btn"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/chat_send_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:alpha="0.5"
+            android:layout_height="36dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:background="@android:color/white"
             android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_send_black_24dp" />
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
 </RelativeLayout>

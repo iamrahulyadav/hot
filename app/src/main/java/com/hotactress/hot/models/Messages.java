@@ -14,6 +14,5 @@ public class Messages {
    private String message, type;
    private long  time;
    private boolean seen;
-
    private String from;
 }

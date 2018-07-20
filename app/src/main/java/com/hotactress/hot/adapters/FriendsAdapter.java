@@ -1,5 +1,6 @@
 package com.hotactress.hot.adapters;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,13 @@ import com.hotactress.hot.utils.FirebaseUtil;
 import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Base64;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -84,9 +92,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                                     Gen.startActivity(activity, false, ProfileActivity.class, "user_id", friend.getId());
                                 } else if(i == 1){
                                     Intent chatIntent = new Intent(activity, ChatActivity.class);
-                                    chatIntent.putExtra("user_id", friend.getId());
+                                    byte []someByteArray = SerializationUtils.serialize(user);
+                                    chatIntent.putExtra("user_serialized", someByteArray);
+                                    chatIntent.putExtra("user_id", user.getId());
                                     chatIntent.putExtra("user_name", user.getName());
                                     activity.startActivity(chatIntent);
+
                                 }
                             }
                         });

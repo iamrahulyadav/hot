@@ -1,11 +1,8 @@
 package com.hotactress.hot.adapters;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,18 +19,16 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
 import com.hotactress.hot.activities.ChatActivity;
-import com.hotactress.hot.activities.ProfileActivity;
 import com.hotactress.hot.models.Conv;
-import com.hotactress.hot.models.Friend;
 import com.hotactress.hot.models.UserProfile;
-import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static java.security.AccessController.getContext;
 
 
 /**
@@ -108,23 +103,24 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                final String userName = dataSnapshot.child("name").getValue().toString();
-                String userThumb = dataSnapshot.child("thumbImage").getValue().toString();
+                final UserProfile userProfile = UserProfile.createUserFromDataSnapshot(list_user_id, dataSnapshot);
 
                 if(dataSnapshot.hasChild("online")) {
                     String userOnline = dataSnapshot.child("online").getValue().toString();
                     convViewHolder.setUserOnline(userOnline);
                 }
 
-                convViewHolder.setName(userName);
-                convViewHolder.setUserImage(userThumb);
+                convViewHolder.setName(userProfile.getName());
+                convViewHolder.setUserImage(userProfile.getThumbImage());
 
                 convViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent chatIntent = new Intent(activity, ChatActivity.class);
+                        byte []someByteArray = SerializationUtils.serialize(userProfile);
+                        chatIntent.putExtra("user_serialized", someByteArray);
                         chatIntent.putExtra("user_id", list_user_id);
-                        chatIntent.putExtra("user_name", userName);
+                        chatIntent.putExtra("user_name", userProfile.getName());
                         activity.startActivity(chatIntent);
                     }
                 });

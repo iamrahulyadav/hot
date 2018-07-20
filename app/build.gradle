@@ -59,6 +59,11 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+    implementation 'commons-codec:commons-codec:1.9'
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'
