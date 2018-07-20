@@ -296,6 +296,29 @@ public class Gen {
         return activity.getResources().getIdentifier(resName, "id", activity.getPackageName());
     }
 
+    public static Boolean getBooleanValueFromLocalStorage(String key) {
+        SharedPreferences settings = MyApplication.getAppContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+        return settings.getBoolean(key, false);
+    }
+
+    public static boolean isUserOpeningAppForTheFirstTime() {
+//        return true;
+        return !Gen.getBooleanValueFromLocalStorage(Constants.NOT_FIRST_TIME_LAUNCH);
+    }
+
+    public static SharedPreferences.Editor getSharedPreferenceEditor() {
+        SharedPreferences settings = MyApplication.getAppContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        return editor;
+    }
+
+    public static void saveAppStateToNotFirstLaunch() {
+        SharedPreferences.Editor editor = getSharedPreferenceEditor();
+
+        editor.putBoolean(Constants.NOT_FIRST_TIME_LAUNCH, true);
+        editor.commit();
+    }
+
     public static List<Bitmap> splitImage(Bitmap bitmap, int size, int blockSize) {
         int piecesNumber = size * size;
 

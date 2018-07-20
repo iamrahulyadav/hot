@@ -7,6 +7,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorChatBackground">#83a169</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTransparentWhite">#cccccc</color>
     <color name="colorBlueDark">#032160</color>
     <color name="transparentColor">#00FFFFFF</color>
 </resources>

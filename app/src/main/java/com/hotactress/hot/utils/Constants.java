@@ -15,6 +15,8 @@ public class Constants {
     public static String PREFS_NAME = "PreferencesFile";
     public static String INVITE_URL_FOR_USER = "INVITE_URL_FOR_USER";
     public static String INVITED_BY = "invitedBy";
+    public static final String NOT_FIRST_TIME_LAUNCH = "not_first_time_launch";
+
 
 
     public static final String PUZZLE_SOLVING_ACTIVITY = "PUZZLE_SOLVING_ACTIVITY";

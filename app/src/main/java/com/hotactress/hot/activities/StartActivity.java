@@ -58,7 +58,10 @@ public class StartActivity extends AppCompatActivity {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        if(mAuth.getCurrentUser() != null) {
+        if(Gen.isUserOpeningAppForTheFirstTime()) {
+            Gen.startActivity(this, true, IntroSliderActivity.class);
+        }
+        else if(mAuth.getCurrentUser() != null) {
             Gen.startActivity(this, true, ChatMainActivity.class);
         } else {
             Gen.startActivity(this, true, RegisterActivity.class);

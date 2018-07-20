@@ -25,6 +25,9 @@
             android:name=".activities.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activities.IntroSliderActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.UsersActivity"
             android:screenOrientation="portrait" />
         <activity
