@@ -45,8 +45,7 @@ import com.hotactress.hot.utils.Gen;
 import com.hotactress.hot.utils.GetTimeAgo;
 import com.squareup.picasso.Picasso;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
+
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 

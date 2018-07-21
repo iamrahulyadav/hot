@@ -15,8 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".activities.MainActivity"></activity>
-        <activity android:name=".activities.PuzzleSolvingActivity"></activity>
+        <activity android:name=".activities.MainActivity">
+
+        </activity>
+        <activity android:name=".activities.PuzzleSolvingActivity">
+
+        </activity>
         <activity android:name=".activities.VideoMainActivity">
         </activity>
         <activity

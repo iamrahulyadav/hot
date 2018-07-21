@@ -23,7 +23,6 @@ import com.hotactress.hot.models.Conv;
 import com.hotactress.hot.models.UserProfile;
 import com.squareup.picasso.Picasso;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.List;
