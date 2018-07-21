@@ -281,6 +281,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
                 imagePlaceHolderLayout.setVisibility(View.VISIBLE);
                 ViewGroup.LayoutParams layoutParams = imagePlaceHolderLayout.getLayoutParams();
                 layoutParams.height = width - 100;
+
                 imagePlaceHolderLayout.setLayoutParams(layoutParams);
 
 

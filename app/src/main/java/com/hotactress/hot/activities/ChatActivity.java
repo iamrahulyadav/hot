@@ -339,7 +339,7 @@ public class ChatActivity extends PresenceActivity {
 
         DatabaseReference messageRef = mRootRef.child("messages").child(mCurrentUserId).child(mChatUser);
 
-        Query messageQuery = messageRef.orderByKey().endAt(mLastKey).limitToLast(10);
+        Query messageQuery = messageRef.orderByChild("time").endAt(mLastKey).limitToLast(10);
 
         messageQuery.addChildEventListener(new ChildEventListener() {
             @Override
@@ -408,7 +408,7 @@ public class ChatActivity extends PresenceActivity {
 
         DatabaseReference messageRef = mRootRef.child("messages").child(mCurrentUserId).child(mChatUser);
 
-        Query messageQuery = messageRef.orderByKey().limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
+        Query messageQuery = messageRef.orderByChild("time").limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
 
 
         messageQuery.addChildEventListener(new ChildEventListener() {
@@ -473,7 +473,7 @@ public class ChatActivity extends PresenceActivity {
             messageMap.put("message", message);
             messageMap.put("seen", false);
             messageMap.put("type", "text");
-            messageMap.put("time", currentTimeInMillis);
+            messageMap.put("time", ServerValue.TIMESTAMP);
             messageMap.put("from", mCurrentUserId);
 
             Map messageUserMap = new HashMap();
