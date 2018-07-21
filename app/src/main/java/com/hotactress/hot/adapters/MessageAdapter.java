@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -166,7 +167,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
         TextView messageText, timeText, nameText;
         CircleImageView profileImage;
         LinearLayout imagePlaceHolderLayout;
-        ImageView messageImage;
+        PhotoView messageImage;
 
 
         ReceivedMessageHolder(View itemView) {
@@ -248,7 +249,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
         TextView messageText, timeText, nameText;
         LinearLayout imagePlaceHolderLayout;
         CircleImageView profileImage;
-        ImageView messageImage;
+        PhotoView messageImage;
 
         SentMessageHolder(View itemView) {
             super(itemView);
