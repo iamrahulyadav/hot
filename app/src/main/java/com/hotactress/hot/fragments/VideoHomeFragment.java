@@ -9,13 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arasthel.asyncjob.AsyncJob;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.hotactress.hot.R;
 import com.hotactress.hot.models.Video;
 import com.hotactress.hot.recylerviews.VideoMainActivityRecyclerView;
+import com.hotactress.hot.utils.FirebaseUtil;
 import com.hotactress.hot.utils.Gen;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,28 +40,45 @@ public class VideoHomeFragment extends Fragment {
         return root;
     }
 
-    private void setUpLayout(View v){
+    private void setUpLayout(View v) {
         ButterKnife.bind(this, v);
         mMainPageRecyclerView.setHasFixedSize(true);
         mMainPageRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         Gen.showLoader(getActivity());
-        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("videos");
+//        reference.setValue("videos");
+        FirebaseUtil.getVideosDataRef().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void doOnBackground() {
-                mainPageDataList = Video.getData();
-                AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
-                    @Override
-                    public void doInUIThread() {
-                        Gen.hideLoader(getActivity());
-                        mMainPageRecyclerView.setAdapter(new VideoMainActivityRecyclerView(mainPageDataList, getActivity()));
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Gen.hideLoader(getActivity());
+
+                Map<String, List> map = (Map<String, List>) dataSnapshot.getValue();
+                Map<String, List<Video>> videoMap = new HashMap<>();
+
+                for (Map.Entry<String, List> entry : map.entrySet()) {
+                    String category = entry.getKey();
+                    List<Video> videoList = new ArrayList<>();
+                    for (Object o : entry.getValue()) {
+                        Map<String, String> mv = (Map<String, String>) o;
+                        Video video = new Video(mv.get("videoId"), mv.get("title"), category);
+                        videoList.add(video);
                     }
-                });
+                    videoMap.put(category, videoList);
+                }
+                mMainPageRecyclerView.setAdapter(new VideoMainActivityRecyclerView(videoMap, getActivity()));
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Gen.hideLoader(getActivity());
             }
         });
 
+
     }
 
-    public interface VideoSelected{
+    public interface VideoSelected {
         void videoSelected(Video category);
     }
 

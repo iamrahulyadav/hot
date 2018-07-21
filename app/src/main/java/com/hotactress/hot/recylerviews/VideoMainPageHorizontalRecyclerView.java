@@ -42,7 +42,7 @@ public class VideoMainPageHorizontalRecyclerView extends RecyclerView.Adapter<Vi
 
         final Video story = holder.video;
         Picasso.get()
-                .load(holder.video.randomThumbnailUrl())
+                .load(holder.video.getThumbnailUrls()[0])
                 .error(R.drawable.picasso_placeholder)
                 .placeholder(R.drawable.picasso_placeholder)
                 .into(holder.imageView);

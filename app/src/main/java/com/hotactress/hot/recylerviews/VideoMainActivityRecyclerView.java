@@ -15,7 +15,10 @@ import com.hotactress.hot.fragments.VideoHomeFragment;
 import com.hotactress.hot.models.Video;
 import com.hotactress.hot.utils.Gen;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,12 +26,14 @@ import butterknife.ButterKnife;
 public class VideoMainActivityRecyclerView extends RecyclerView.Adapter<VideoMainActivityRecyclerView.RecyclerviewHolder> {
 
 
-    List<Video> dataArray;
+    Map<String, List<Video>> videoMap;
+    List<String> categoryList;
     Activity activity;
 
-    public VideoMainActivityRecyclerView(List<Video> data, Activity activity) {
-        this.dataArray = data;
+    public VideoMainActivityRecyclerView(Map<String, List<Video>> data, Activity activity) {
+        this.videoMap = data;
         this.activity = activity;
+        this.categoryList = new ArrayList<>(data.keySet());
     }
 
     @NonNull
@@ -41,22 +46,23 @@ public class VideoMainActivityRecyclerView extends RecyclerView.Adapter<VideoMai
     @Override
     public void onBindViewHolder(@NonNull RecyclerviewHolder holder, final int position) {
         final Activity activity = this.activity;
+        String category = categoryList.get(position);
         holder.childRecyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-        holder.childRecyclerView.setAdapter(new VideoMainPageHorizontalRecyclerView(dataArray, activity));
-        holder.textView.setText(dataArray.get(position).getCategory());
+        holder.childRecyclerView.setAdapter(new VideoMainPageHorizontalRecyclerView(videoMap.get(category), activity));
+        holder.textView.setText(categoryList.get(position));
 
-        holder.viewAllTextView.setOnClickListener(new TextView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((VideoHomeFragment.VideoSelected) activity).videoSelected(dataArray.get(position));
-            }
-        });
+//        holder.viewAllTextView.setOnClickListener(new TextView.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ((VideoHomeFragment.VideoSelected) activity).videoSelected(videoMap.get(position));
+//            }
+//        });
 
     }
 
     @Override
     public int getItemCount() {
-        return dataArray.size();
+        return categoryList.size();
     }
 
     public class RecyclerviewHolder extends RecyclerView.ViewHolder {
