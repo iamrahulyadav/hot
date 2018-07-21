@@ -11,4 +11,9 @@
     <string name="invitation_custom_image">https://lh3.googleusercontent.com/rwJXzv1HjIfBSLfJW5MFXFK7ioF7I5hBUXvVTvJhtFvXH94x1nRIa1--pRDHKADu8A=s360-rw</string>
     <string name="invitation_deep_link">lolmenow.page.link</string>
     <string name="share_app">Share app</string>
+    <string name="action_settings">Settings</string>
+    <string name="home_option">Home</string>
+    <string name="search_option">Search</string>
+    <string name="favourite_option">Favourite</string>
+    <string name="watch_hot_videos">Watch hot videos</string>
 </resources>

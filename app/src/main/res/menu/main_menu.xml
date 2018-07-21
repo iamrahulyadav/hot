@@ -18,6 +18,9 @@
         android:id="@+id/view_photos"
         android:title="@string/hot_pics" />
     <item
+        android:id="@+id/view_videos"
+        android:title="@string/watch_hot_videos" />
+    <item
         android:id="@+id/chat_logout"
         android:title="@string/logout" />
 </menu>

@@ -103,6 +103,8 @@ public class ChatMainActivity extends PresenceActivity {
             Gen.startActivity(this, false, PuzzleSolvingActivity.class);
         } else if(item.getItemId() == R.id.share_app) {
             Gen.startActivity(this, false, SettingsActivity.class);
+        } else if(item.getItemId() == R.id.view_videos) {
+            Gen.startActivity(this, false, VideoMainActivity.class);
         }
 
         return true;
