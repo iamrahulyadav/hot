@@ -25,4 +25,8 @@ public class FirebaseUtil {
         return getUsersRef().child(userId);
     }
 
+    public static DatabaseReference getVideosDataRef(){
+        return FirebaseDatabase.getInstance().getReference("videos");
+    }
+
 }

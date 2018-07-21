@@ -533,4 +533,11 @@ public class Gen {
         String img4 = String.format("https://img.youtube.com/vi/%s/3.jpg", videoId);
         return new String[]{img1, img2, img3, img4};
     }
+
+    public static void logFirebaseEvent(String eventName, String itemName){
+        Bundle b = new Bundle();
+        b.putString(FirebaseAnalytics.Param.ITEM_NAME, itemName);
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(MyApplication.getAppContext());
+        firebaseAnalytics.logEvent(eventName, b);
+    }
 }

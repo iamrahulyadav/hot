@@ -31,6 +31,7 @@ import com.hotactress.hot.fragments.VideoHomeFragment;
 import com.hotactress.hot.fragments.VideoSearchFragment;
 import com.hotactress.hot.models.Format;
 import com.hotactress.hot.models.Video;
+import com.hotactress.hot.utils.Constants;
 import com.hotactress.hot.utils.Gen;
 import com.hotactress.hot.utils.VolleySingelton;
 
@@ -189,12 +190,14 @@ public class VideoMainActivity extends AppCompatActivity implements
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Format format = activity.formatHashMap.get(which);
+                                Gen.logFirebaseEvent(Constants.VIDEO_PLAYED_ACTIVITY, format.getFormat());
                                 activity.startVideoPlay(format);
                             }
                         });
                         activity.builder.show();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Gen.toast("Sorry this video cannot be played");
                     }
 
                 }
@@ -203,18 +206,24 @@ public class VideoMainActivity extends AppCompatActivity implements
                 public void onErrorResponse(VolleyError error) {
                     Gen.hideLoader(activity);
                     Log.e("", error.getMessage(), error);
+                    Gen.toast("Sorry this video cannot be played");
+
                 }
             });
             requestQueue.add(request);
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+            Gen.toast("Sorry this video cannot be played");
 
+        }
     }
 
     @Override
     public void videoSelected(Video video) {
-        extractVideoQualities(this, video.youtubeUrl());
+        Gen.logFirebaseEvent(Constants.VIDEO_SELECTED_ACTIVITY, video.getUrl());
+        extractVideoQualities(this, video.getUrl());
     }
+
+
 }
