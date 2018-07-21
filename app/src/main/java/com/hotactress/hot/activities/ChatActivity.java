@@ -104,6 +104,8 @@ public class ChatActivity extends PresenceActivity {
 
     private String mLastKey = "";
     private String mPrevKey = "";
+    private ChildEventListener messageDataListener;
+    private Query messageQuery;
 
 
     @Override
@@ -378,7 +380,7 @@ public class ChatActivity extends PresenceActivity {
 
                 mRefreshLayout.setRefreshing(false);
 
-                mLinearLayout.scrollToPositionWithOffset(10, 0);
+//                mLinearLayout.scrollToPositionWithOffset(10, 0);
 
             }
 
@@ -409,10 +411,10 @@ public class ChatActivity extends PresenceActivity {
 
         DatabaseReference messageRef = mRootRef.child("messages").child(mCurrentUserId).child(mChatUser);
 
-        Query messageQuery = messageRef.orderByChild("time").limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
+        messageQuery = messageRef.orderByChild("time").limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
 
 
-        messageQuery.addChildEventListener(new ChildEventListener() {
+        messageDataListener = messageQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -432,7 +434,7 @@ public class ChatActivity extends PresenceActivity {
                 messagesList.add(message);
                 mAdapter.notifyDataSetChanged();
 
-                mMessagesList.scrollToPosition(messagesList.size() - 1);
+//                mMessagesList.scrollToPosition(messagesList.size() - 1);
 
                 mRefreshLayout.setRefreshing(false);
 
@@ -501,6 +503,12 @@ public class ChatActivity extends PresenceActivity {
 
             Gen.sendNotification(mChatUser, "You have new message", "You have received new message(s), check it out.");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        messageQuery.removeEventListener(messageDataListener);
+        super.onDestroy();
     }
 
     @Override
