@@ -338,8 +338,9 @@ public class ChatActivity extends PresenceActivity {
     private void loadMoreMessages() {
 
         DatabaseReference messageRef = mRootRef.child("messages").child(mCurrentUserId).child(mChatUser);
+        Messages lastMessage = messagesList.get(0);
 
-        Query messageQuery = messageRef.orderByChild("time").endAt(mLastKey).limitToLast(10);
+        Query messageQuery = messageRef.orderByChild("time").endAt(lastMessage.getTime()).limitToLast(10);
 
         messageQuery.addChildEventListener(new ChildEventListener() {
             @Override
