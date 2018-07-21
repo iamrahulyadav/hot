@@ -31,10 +31,10 @@ public class IntroSliderAdapter extends PagerAdapter {
     }
 
     public int[] slide_images = {
-            R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher,
+            R.mipmap.hot_chat,
+            R.mipmap.hot_photo,
+            R.mipmap.hot_video,
+            R.mipmap.hot_puzzle,
     };
 
     public String[] slide_headings = {
