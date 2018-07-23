@@ -21,6 +21,7 @@ import com.arasthel.asyncjob.AsyncJob;
 import com.hotactress.hot.R;
 import com.hotactress.hot.models.Format;
 import com.hotactress.hot.models.Video;
+import com.hotactress.hot.utils.Constants;
 import com.hotactress.hot.utils.Gen;
 import com.squareup.picasso.Picasso;
 
@@ -105,6 +106,8 @@ public class VideoMoreOptionFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v.getId() == downloadButton.getId()) {
+            Gen.logFirebaseEvent(Constants.VIDEO_PLAYED_ACTIVITY, video.getUrl());
+
             if (progressBar.getVisibility() == View.GONE)
                 progressBar.setVisibility(View.VISIBLE);
             AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {

@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.hotactress.hot.fragments.ActivitiesFragment;
 import com.hotactress.hot.fragments.ChatsFragment;
 import com.hotactress.hot.fragments.FriendsFragment;
 import com.hotactress.hot.fragments.RequestsFragment;
@@ -14,8 +15,17 @@ import com.hotactress.hot.fragments.RequestsFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    RequestsFragment requestsFragment ;
+    ChatsFragment chatsFragment ;
+    FriendsFragment friendsFragment ;
+    ActivitiesFragment activitiesFragment ;
+
     public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
+        requestsFragment = new RequestsFragment();
+        chatsFragment = new ChatsFragment();
+        friendsFragment = new FriendsFragment();
+        activitiesFragment = new ActivitiesFragment();
     }
 
     @Override
@@ -23,17 +33,15 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         switch(position) {
             case 0:
-                RequestsFragment requestsFragment = new RequestsFragment();
                 return requestsFragment;
 
             case 1:
-                ChatsFragment chatsFragment = new ChatsFragment();
                 return  chatsFragment;
 
             case 2:
-                FriendsFragment friendsFragment = new FriendsFragment();
                 return friendsFragment;
-
+            case 3:
+                return activitiesFragment;
             default:
                 return  null;
         }
@@ -41,7 +49,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     public CharSequence getPageTitle(int position){
@@ -55,6 +63,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
             case 2:
                 return "FRIENDS";
+
+            case 3:
+                return "ACTIVITIES";
 
             default:
                 return null;

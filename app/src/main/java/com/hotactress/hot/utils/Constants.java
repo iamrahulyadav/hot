@@ -22,6 +22,7 @@ public class Constants {
     public static final String PUZZLE_SOLVING_ACTIVITY = "PUZZLE_SOLVING_ACTIVITY";
     public static final String SHARE_ACTIVITY = "SHARE_ACTIVITY";
     public static final String VIDEO_SELECTED_ACTIVITY = "VIDEO_SELECTED_ACTIVITY";
-    public static final String VIDEO_PLAYED_ACTIVITY = "VIDEO_SELECTED_ACTIVITY";
+    public static final String VIDEO_PLAYED_ACTIVITY = "VIDEO_PLAYED_ACTIVITY";
+    public static final String VIDEO_DOWNLOADED_ACTIVITY = "VIDEO_PLAYED_ACTIVITY";
 
 }

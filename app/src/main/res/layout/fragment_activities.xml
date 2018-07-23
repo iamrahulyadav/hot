@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.ActivitiesFragment">
+
+
+        <ImageView
+            android:id="@+id/fragment_activities_video_image_id"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/hot_video"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/fragment_activities_chat_image_id"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/hot_chat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_activities_video_image_id" />
+
+        <ImageView
+            android:id="@+id/fragment_activities_puzzle_image_id"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_activities_pics_image_id" />
+
+        <ImageView
+            android:id="@+id/fragment_activities_pics_image_id"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/hot_photo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_activities_chat_image_id" />
+
+        <TextView
+            android:id="@+id/fragment_activities_puzzle_text_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="सुलझाएं लड़कियों की पहेली और मौका पाएं उनसे मिलने का"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_activities_puzzle_image_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fragment_activities_puzzle_image_id"
+            app:layout_constraintTop_toTopOf="@+id/fragment_activities_puzzle_image_id" />
+
+        <TextView
+            android:id="@+id/fragment_activities_pics_text_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="देखें हेरोइनो के हसीं और सेक्सी फोटोज"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_activities_pics_image_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fragment_activities_pics_image_id"
+            app:layout_constraintTop_toTopOf="@+id/fragment_activities_pics_image_id" />
+
+        <TextView
+            android:id="@+id/fragment_activities_chat_view_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="बात करें अपनइ आस पास के लड़के लड़कियों से"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_activities_chat_image_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fragment_activities_chat_image_id"
+            app:layout_constraintTop_toTopOf="@+id/fragment_activities_chat_image_id" />
+
+        <TextView
+            android:id="@+id/fragment_activities_video_view_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:maxLines="3"
+            android:text="देखें सेक्सी Videos और कातिलाना भोजपुरी गाने"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_activities_video_image_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fragment_activities_video_image_id"
+            app:layout_constraintTop_toTopOf="@+id/fragment_activities_video_image_id" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

@@ -220,6 +220,7 @@ public class VideoMainActivity extends AppCompatActivity implements
 
     @Override
     public void onVideoPlayPressed(Video video, Format format) {
+        Gen.logFirebaseEvent(Constants.VIDEO_PLAYED_ACTIVITY, video.getUrl());
         startVideoPlay(format);
     }
 
