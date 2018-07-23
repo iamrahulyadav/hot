@@ -32,8 +32,6 @@ public class ActivitiesFragment extends Fragment implements View.OnClickListener
     public ImageView picsActivityImage;
     @BindView(R.id.fragment_activities_puzzle_image_id)
     public ImageView puzzleActivityImage;
-    @BindView(R.id.fragment_activities_chat_image_id)
-    public ImageView chatActivityImage;
     @BindView(R.id.fragment_activities_share_image_id)
     public ImageView shareActivityImage;
 
@@ -43,8 +41,6 @@ public class ActivitiesFragment extends Fragment implements View.OnClickListener
     public TextView picsTextView;
     @BindView(R.id.fragment_activities_puzzle_text_id)
     public TextView puzzleTextView;
-    @BindView(R.id.fragment_activities_chat_view_id)
-    public TextView chatTextView;
     @BindView(R.id.fragment_activities_share_view_id)
     public TextView shareTextView;
 
@@ -57,8 +53,6 @@ public class ActivitiesFragment extends Fragment implements View.OnClickListener
         videoActivityImage.setOnClickListener(this);
         picsActivityImage.setOnClickListener(this);
         picsTextView.setOnClickListener(this);
-        chatActivityImage.setOnClickListener(this);
-        chatTextView.setOnClickListener(this);
         puzzleActivityImage.setOnClickListener(this);
         puzzleTextView.setOnClickListener(this);
         shareTextView.setOnClickListener(this);
@@ -72,8 +66,6 @@ public class ActivitiesFragment extends Fragment implements View.OnClickListener
             Gen.startActivity(getActivity(), false, VideoMainActivity.class);
         else if (v.getId() == picsActivityImage.getId() || v.getId() == picsTextView.getId())
             Gen.startActivity(getActivity(), false, GridActivity.class);
-        else if (v.getId() == chatActivityImage.getId() || v.getId() == chatTextView.getId())
-            Gen.startActivity(getActivity(), true, ChatMainActivity.class);
         else if (v.getId() == puzzleActivityImage.getId() || v.getId() == puzzleTextView.getId())
             Gen.startActivity(getActivity(), false, PuzzleSolvingActivity.class);
         else if (v.getId() == shareActivityImage.getId() || v.getId() == shareTextView.getId()) {
