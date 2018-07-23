@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.hotactress.hot.R;
 import com.hotactress.hot.activities.helpers.TranslucentAppCompatActivity;
 import com.hotactress.hot.adapters.IntroSliderAdapter;
+import com.hotactress.hot.utils.AnalyticsManager;
 import com.hotactress.hot.utils.Gen;
 
 
@@ -48,6 +49,8 @@ public class IntroSliderActivity extends TranslucentAppCompatActivity {
 
         mSlideViewPager = findViewById(R.id.slide_view_pager);
         mDotLayout = findViewById(R.id.dots_layout);
+
+        AnalyticsManager.log(AnalyticsManager.Event.INTRO_SLIDER_ACTIVITY_LAUNCHED, "", "");
 
         introSliderAdapter = new IntroSliderAdapter(this, activity);
         mSlideViewPager.setAdapter(introSliderAdapter);

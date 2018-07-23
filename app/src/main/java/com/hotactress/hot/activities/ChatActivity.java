@@ -114,6 +114,9 @@ public class ChatActivity extends PresenceActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        AnalyticsManager.log(AnalyticsManager.Event.CHAT_ACTIVITY_LAUNCHED, "", "");
+
+
         mChatToolbar = (Toolbar) findViewById(R.id.chat_app_bar);
         setSupportActionBar(mChatToolbar);
 

@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.hotactress.hot.R;
+import com.hotactress.hot.utils.AnalyticsManager;
 import com.hotactress.hot.utils.Gen;
 
 /**
@@ -45,6 +46,8 @@ public class ChatMainActivity extends PresenceActivity {
 
         setContentView(R.layout.activity_chat_main);
         mAuth = FirebaseAuth.getInstance();
+
+        AnalyticsManager.log(AnalyticsManager.Event.CHAT_MAIN_ACTIVITY_LAUNCHED, "", "");
 
         mToolbar = findViewById(R.id.chat_main_app_bar);
         setSupportActionBar(mToolbar);
