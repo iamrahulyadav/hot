@@ -1,7 +1,13 @@
 package com.hotactress.hot.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.hotactress.hot.utils.Gen;
 
+import org.joda.time.DateTime;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,7 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Video {
+public class Video implements Serializable {
     public String videoId;
     public String title;
     public String category;
@@ -50,5 +56,21 @@ public class Video {
 
     public String getUrl(){
         return youtubeUrl();
+    }
+
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(videoId);
+//        dest.writeString(title);
+//        dest.writeString(category);
+//    }
+
+    public String getDownloadbleFilename(){
+        return String.format("%s_%s", title, DateTime.now().toDateTimeISO());
     }
 }

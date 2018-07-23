@@ -7,9 +7,9 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         multiDexEnabled true
-        versionCode 13
-        versionCode 13
-        versionName "1.13"
+        versionCode 1
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -61,6 +61,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+    implementation 'com.github.panwrona:DownloadProgressBar:1.1'
+
 
     //Butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'

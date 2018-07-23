@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Format {
+public class Format implements Serializable {
+
+    private static final BigInteger BYTE = BigInteger.valueOf(1);
+    private static final BigInteger KILO_BYTE = BigInteger.valueOf(1000);
+    private static final BigInteger MEGA_BYTE = BigInteger.valueOf(1000000);
+    private static final BigInteger GIGA_BYTE = BigInteger.valueOf(1000000000);
+
     String format;
     Format.Source source;
     String url;
@@ -71,7 +78,7 @@ public class Format {
     public String displayString(){
         if (source == Source.YOUTUBE){
 //            return format;
-            return String.format("%sp %s  ~%s", height, ext, readableFileSize());
+            return String.format("%s %sp  -- %s", ext, height, readableFileSize());
         }
         return String.format("%sp %s  ~%s", height, ext, readableFileSize());
     }
@@ -80,13 +87,13 @@ public class Format {
 
         if (fileSize.compareTo(BigInteger.ONE) < 0)
             return "";
-        if (fileSize.compareTo(BigInteger.valueOf(1000)) < 0)
-            return String.format("%s B", fileSize.divide(BigInteger.valueOf(8)).intValue());
-        else if (fileSize.compareTo(BigInteger.valueOf(1000)) > 0 && fileSize.compareTo(BigInteger.valueOf(1000000)) < 0)
-            return String.format("%s KB", fileSize.divide(BigInteger.valueOf(8000)));
-        else if (fileSize.compareTo(BigInteger.valueOf(1000000)) > 0 && fileSize.compareTo(BigInteger.valueOf(1000000000)) < 0)
-            return String.format("%s MB", fileSize.divide(BigInteger.valueOf(8000000)));
-        else return String.format("%s GB", fileSize.divide(new BigInteger("8000000000")));
+        if (fileSize.compareTo(BYTE) < 0)
+            return String.format("%s B", fileSize.divide(BYTE).intValue());
+        else if (fileSize.compareTo(KILO_BYTE) > 0 && fileSize.compareTo(MEGA_BYTE) < 0)
+            return String.format("%s KB", fileSize.divide(KILO_BYTE));
+        else if (fileSize.compareTo(MEGA_BYTE) > 0 && fileSize.compareTo(GIGA_BYTE) < 0)
+            return String.format("%s MB", fileSize.divide(MEGA_BYTE));
+        else return String.format("%s GB", fileSize.divide(GIGA_BYTE));
     }
 
 }

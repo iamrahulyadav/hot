@@ -540,4 +540,11 @@ public class Gen {
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(MyApplication.getAppContext());
         firebaseAnalytics.logEvent(eventName, b);
     }
+
+    public static File getDownloadDir(){
+        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Download/HotApp");
+        if (!file.exists())
+            file.mkdir();
+        return file;
+    }
 }
