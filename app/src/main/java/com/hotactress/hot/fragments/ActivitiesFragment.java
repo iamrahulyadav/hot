@@ -17,6 +17,7 @@ import com.hotactress.hot.activities.ChatMainActivity;
 import com.hotactress.hot.activities.GridActivity;
 import com.hotactress.hot.activities.PuzzleSolvingActivity;
 import com.hotactress.hot.activities.VideoMainActivity;
+import com.hotactress.hot.utils.Constants;
 import com.hotactress.hot.utils.Gen;
 
 import butterknife.BindView;
@@ -25,15 +26,27 @@ import butterknife.ButterKnife;
 public class ActivitiesFragment extends Fragment implements View.OnClickListener {
 
 
-    @BindView(R.id.fragment_activities_video_image_id) public ImageView videoActivityImage;
-    @BindView(R.id.fragment_activities_pics_image_id)public ImageView picsActivityImage;
-    @BindView(R.id.fragment_activities_puzzle_image_id)public ImageView puzzleActivityImage;
-    @BindView(R.id.fragment_activities_chat_image_id)public ImageView chatActivityImage;
+    @BindView(R.id.fragment_activities_video_image_id)
+    public ImageView videoActivityImage;
+    @BindView(R.id.fragment_activities_pics_image_id)
+    public ImageView picsActivityImage;
+    @BindView(R.id.fragment_activities_puzzle_image_id)
+    public ImageView puzzleActivityImage;
+    @BindView(R.id.fragment_activities_chat_image_id)
+    public ImageView chatActivityImage;
+    @BindView(R.id.fragment_activities_share_image_id)
+    public ImageView shareActivityImage;
 
-    @BindView(R.id.fragment_activities_video_view_id)public TextView videoTextView;
-    @BindView(R.id.fragment_activities_pics_text_id)public TextView picsTextView;
-    @BindView(R.id.fragment_activities_puzzle_text_id)public TextView puzzleTextView;
-    @BindView(R.id.fragment_activities_chat_view_id)public TextView chatTextView;
+    @BindView(R.id.fragment_activities_video_view_id)
+    public TextView videoTextView;
+    @BindView(R.id.fragment_activities_pics_text_id)
+    public TextView picsTextView;
+    @BindView(R.id.fragment_activities_puzzle_text_id)
+    public TextView puzzleTextView;
+    @BindView(R.id.fragment_activities_chat_view_id)
+    public TextView chatTextView;
+    @BindView(R.id.fragment_activities_share_view_id)
+    public TextView shareTextView;
 
     @Nullable
     @Override
@@ -48,6 +61,8 @@ public class ActivitiesFragment extends Fragment implements View.OnClickListener
         chatTextView.setOnClickListener(this);
         puzzleActivityImage.setOnClickListener(this);
         puzzleTextView.setOnClickListener(this);
+        shareTextView.setOnClickListener(this);
+        shareActivityImage.setOnClickListener(this);
         return root;
     }
 
@@ -61,5 +76,9 @@ public class ActivitiesFragment extends Fragment implements View.OnClickListener
             Gen.startActivity(getActivity(), true, ChatMainActivity.class);
         else if (v.getId() == puzzleActivityImage.getId() || v.getId() == puzzleTextView.getId())
             Gen.startActivity(getActivity(), false, PuzzleSolvingActivity.class);
+        else if (v.getId() == shareActivityImage.getId() || v.getId() == shareTextView.getId()) {
+            Gen.logFirebaseEvent(Constants.SHARE_ACTIVITY, "cash_prize_clicked");
+            Gen.shareApp(getActivity());
+        }
     }
 }
