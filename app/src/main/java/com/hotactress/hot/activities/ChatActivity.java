@@ -41,6 +41,7 @@ import com.hotactress.hot.activities.helpers.PresenceActivity;
 import com.hotactress.hot.adapters.MessageAdapter;
 import com.hotactress.hot.models.Messages;
 import com.hotactress.hot.models.UserProfile;
+import com.hotactress.hot.utils.AnalyticsManager;
 import com.hotactress.hot.utils.Gen;
 import com.hotactress.hot.utils.GetTimeAgo;
 import com.squareup.picasso.Picasso;
@@ -136,6 +137,14 @@ public class ChatActivity extends PresenceActivity {
         View action_bar_view = inflater.inflate(R.layout.chat_custom_bar, null);
 
         actionBar.setCustomView(action_bar_view);
+
+        findViewById(R.id.chat_share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AnalyticsManager.log(AnalyticsManager.Event.SHARE_BUTTON_CHAT_CLICKED, "", "");
+                Gen.shareApp(ChatActivity.this);
+            }
+        });
 
         // ---- Custom Action bar Items ----
 

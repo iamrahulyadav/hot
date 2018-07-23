@@ -30,6 +30,18 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LinkButton"
+        android:id="@+id/chat_share"
+        android:text="शेयर करें और बातें करने का मौका पाए."
+        android:layout_above="@id/linearLayout"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_centerHorizontal="true"
+        />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
