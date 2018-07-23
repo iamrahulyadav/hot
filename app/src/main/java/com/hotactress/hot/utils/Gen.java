@@ -2,6 +2,9 @@ package com.hotactress.hot.utils;
 
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -13,6 +16,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -23,6 +27,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +35,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.arasthel.asyncjob.AsyncJob;
 import android.Manifest;
 
@@ -47,6 +55,7 @@ import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.hotactress.hot.MyApplication;
 import com.hotactress.hot.R;
+import com.hotactress.hot.activities.StartActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -63,6 +72,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Created by shubhamagrawal on 06/07/18.
@@ -82,6 +93,8 @@ public class Gen {
     static String shareAppMessage = "इस app पर बहुत सारी हॉट लड़किया है जिससे आप chat कर सकते है. \n" +
             "मेरी referral link से डाउनलोड करिये ";
 
+    private static final String NOTIFICATION_CHANNEL_ID = "1";
+    private static final CharSequence NOTIFICATION_CHANNEL_NAME = "1" ;
 
     public static String utmQueryUrl = "?utm_source=hot%20app&utm_medium=webview&utm_campaign=hot%20app";
     public static final List<String> urls = Arrays.asList("https://lolmenow.com", "https://lolmenow.com");
@@ -89,6 +102,55 @@ public class Gen {
 
     private static FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
 
+
+    public static void sendNotificationToSelf(Activity activity) {
+
+        final NotificationManager notificationManager = (NotificationManager) activity.getSystemService(NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        String title = "आपको मैसेज आया है";
+        String message = "किसी लड़की ने आपको मैसेज किया है, कृपया रजिस्टर की प्रक्रिया पूरी करें और उस मैसेज का रिप्लाई करे ";
+
+        Intent notificationIntent = new Intent(activity, StartActivity.class);
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        notificationIntent.addFlags(notificationIntent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        final String packageName = activity.getPackageName();
+        Uri uri = Uri.parse(
+                "android.resource://"
+                        + packageName
+                        + "/"
+                        + R.raw.success_sound
+        );
+
+
+        Bitmap bm = BitmapFactory.decodeResource(activity.getResources(), R.mipmap.share_image);
+        final NotificationCompat.Builder builder = new  NotificationCompat.Builder(activity, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setColor(activity.getResources().getColor(R.color.colorBlueDark))
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setSound(uri);
+
+        builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bm));
+        notificationManager.notify(0, builder.build());
+    }
+
+    // NOTE: this is via server
     public static void sendNotification(String userId, String title, String message) {
 
         // TODO: if already sent in past one hour, don't send the notification
@@ -194,6 +256,8 @@ public class Gen {
     }
 
     public static void shareApp(Activity activity) {
+        AnalyticsManager.log(AnalyticsManager.Event.SHARE_CLICKED, "", "");
+
         String invitationLink = Gen.getInviteURLFromLocalStorage();
         String msg = shareAppMessage + invitationLink;
 

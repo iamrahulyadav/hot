@@ -106,7 +106,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Log.d(TAG, error.getMessage());
                     }
                 });
                 VolleySingelton.getInstance().getRequestQueue().add(imageRequest);

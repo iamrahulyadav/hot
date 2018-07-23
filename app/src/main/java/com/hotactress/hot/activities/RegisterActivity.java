@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.hotactress.hot.R;
 import com.hotactress.hot.models.UserProfile;
+import com.hotactress.hot.utils.AnalyticsManager;
 import com.hotactress.hot.utils.Gen;
 
 import java.util.HashMap;
@@ -39,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         activity = this;
+        AnalyticsManager.log(AnalyticsManager.Event.REGISTER_ACTIVITY_LAUNCHED, "", "");
+
 
         displayName = findViewById(R.id.register_display_name);
         email = findViewById(R.id.register_email);

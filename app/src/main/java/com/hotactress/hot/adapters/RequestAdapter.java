@@ -67,6 +67,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final String requestFriendId = dataSnapshot.getKey();
                 final UserProfile user = dataSnapshot.getValue(UserProfile.class);
+
+                // TODO: user sometimes coming as null, resulting in crash, don't know the reason why.
                 viewHolder.setName(user.getName());
                 viewHolder.setUserImage(user.getThumbImage());
                 viewHolder.setMessage(user.getStatus(), false /*not sure*/);

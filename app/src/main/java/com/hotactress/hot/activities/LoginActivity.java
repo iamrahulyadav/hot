@@ -16,6 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.hotactress.hot.R;
+import com.hotactress.hot.utils.AnalyticsManager;
 import com.hotactress.hot.utils.FirebaseUtil;
 import com.hotactress.hot.utils.Gen;
 
@@ -37,6 +38,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        AnalyticsManager.log(AnalyticsManager.Event.LOGIN_ACTIVITY_LAUNCHED, "", "");
+
 
         mAuth = FirebaseAuth.getInstance();
         activity = this;
