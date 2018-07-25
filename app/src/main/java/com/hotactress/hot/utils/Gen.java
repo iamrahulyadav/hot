@@ -7,20 +7,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,9 +30,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.arasthel.asyncjob.AsyncJob;
 import android.Manifest;
 
@@ -56,8 +48,6 @@ import com.google.firebase.functions.HttpsCallableResult;
 import com.hotactress.hot.MyApplication;
 import com.hotactress.hot.R;
 import com.hotactress.hot.activities.StartActivity;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -367,6 +357,12 @@ public class Gen {
         return settings.getBoolean(key, false);
     }
 
+
+    public static String getStringValueFromLocalStorage(String key) {
+        SharedPreferences settings = MyApplication.getAppContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+        return settings.getString(key, "");
+    }
+
     public static boolean isUserOpeningAppForTheFirstTime() {
 //        return true;
         return !Gen.getBooleanValueFromLocalStorage(Constants.NOT_FIRST_TIME_LAUNCH);
@@ -384,6 +380,37 @@ public class Gen {
         editor.putBoolean(Constants.NOT_FIRST_TIME_LAUNCH, true);
         editor.commit();
     }
+
+    public static void saveLogOutInLocalStorage() {
+        SharedPreferences.Editor editor = getSharedPreferenceEditor();
+
+        editor.putBoolean(Constants.LOGGED_IN, false);
+        editor.commit();
+    }
+
+    public static void saveLogInInLocalStorage() {
+        SharedPreferences.Editor editor = getSharedPreferenceEditor();
+
+        editor.putBoolean(Constants.LOGGED_IN, true);
+        editor.commit();
+    }
+
+    public static void saveLoggedInUserNameInLocalStorage(String name) {
+        SharedPreferences.Editor editor = getSharedPreferenceEditor();
+
+        editor.putString(Constants.LOGGED_IN_USER_NAME, name);
+        editor.commit();
+    }
+
+    public static boolean isUserLoggedInInLocalStorage() {
+        return Gen.getBooleanValueFromLocalStorage(Constants.LOGGED_IN);
+    }
+
+    public static String getLogeedInUserFromLocalStorage() {
+        return Gen.getStringValueFromLocalStorage(Constants.LOGGED_IN_USER_NAME);
+    }
+
+
 
     public static List<Bitmap> splitImage(Bitmap bitmap, int size, int blockSize) {
         int piecesNumber = size * size;

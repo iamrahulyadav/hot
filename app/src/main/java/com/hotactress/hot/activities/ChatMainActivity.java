@@ -86,7 +86,8 @@ public class ChatMainActivity extends PresenceActivity {
     }
 
     public void logout() {
-        FirebaseAuth.getInstance().signOut();
+        Gen.saveLogOutInLocalStorage();
+//        FirebaseAuth.getInstance().signOut();
         Gen.startActivity(this, true, RegisterActivity.class);
     }
 

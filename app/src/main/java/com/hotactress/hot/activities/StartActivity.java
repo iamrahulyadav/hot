@@ -61,7 +61,7 @@ public class StartActivity extends AppCompatActivity {
         if(Gen.isUserOpeningAppForTheFirstTime()) {
             Gen.startActivity(this, true, IntroSliderActivity.class);
         }
-        else if(mAuth.getCurrentUser() != null) {
+        else if(Gen.isUserLoggedInInLocalStorage()) {
             Gen.startActivity(this, true, ChatMainActivity.class);
         } else {
             Gen.startActivity(this, true, RegisterActivity.class);

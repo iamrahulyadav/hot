@@ -44,38 +44,42 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         displayName = findViewById(R.id.register_display_name);
-        email = findViewById(R.id.register_email);
-        password = findViewById(R.id.register_password);
+//        email = findViewById(R.id.register_email);
+//        password = findViewById(R.id.register_password);
         signup = findViewById(R.id.register_sign_up);
 
-        if(mAuth.getCurrentUser() != null) {
+        if(Gen.isUserLoggedInInLocalStorage()) {
             Gen.startActivity(this, true, ChatMainActivity.class);
         }
 
-        findViewById(R.id.register_login_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Gen.startActivity(activity, false, LoginActivity.class);
-            }
-        });
+//        findViewById(R.id.register_login_link).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Gen.startActivity(activity, false, LoginActivity.class);
+//            }
+//        });
 
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Gen.showLoader(activity);
-                String displayNameString = displayName.getText().toString();
-                String emailString = email.getText().toString();
-                String passwordString = password.getText().toString();
+                String displayNameString = displayName.getText().toString().trim();
 
-                if(!(TextUtils.isEmpty(emailString) || TextUtils.isEmpty(passwordString)))
-                    registerUser(displayNameString, emailString, passwordString);
+                if(!TextUtils.isEmpty(displayNameString)){
+                    if(displayNameString.toLowerCase().equals(Gen.getLogeedInUserFromLocalStorage().toLowerCase())){
+                        Gen.saveLogInInLocalStorage();
+                        Gen.startActivity(activity, true, ChatMainActivity.class);
+                    } else {
+                        registerUser(displayNameString);
+                    }
+                }
             }
         });
     }
 
-    private void registerUser(final String displayNameString, final String emailString, String passwordString) {
-        mAuth.createUserWithEmailAndPassword(emailString, passwordString).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    private void registerUser(final String displayNameString) {
+        mAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Gen.hideLoader(activity);
@@ -91,11 +95,13 @@ public class RegisterActivity extends AppCompatActivity {
                     UserProfile userProfile = new UserProfile();
                     userProfile.setId(uid);
                     userProfile.setName(displayNameString);
-                    userProfile.setEmail(emailString);
+                    userProfile.setEmail("");
                     userProfile.setStatus("Hi there! I'm using Hot");
                     userProfile.setThumbImage("default");
                     userProfile.setImage("default");
                     userProfile.setDeviceToken(deviceToken);
+
+                    Gen.saveLoggedInUserNameInLocalStorage(displayNameString);
 
                     Gen.saveInviteURLToLocalStorage(activity);
 
