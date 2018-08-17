@@ -101,6 +101,8 @@
 
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.ChangeStatusActivity" />
+
+        <meta-data android:name="com.appsee.ApiKey" android:value="862d1afd6bd94bf09ce53b6e4a695674" />
     </application>
 
 </manifest>

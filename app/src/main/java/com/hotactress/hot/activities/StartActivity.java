@@ -1,4 +1,5 @@
 package com.hotactress.hot.activities;
+import com.appsee.Appsee;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -25,6 +26,9 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+
+        Appsee.start();
 
         // Check for App Invite invitations and launch deep-link activity if possible.
         // Requires that an Activity is registered in AndroidManifest.xml to handle

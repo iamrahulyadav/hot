@@ -63,6 +63,7 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     implementation 'com.github.panwrona:DownloadProgressBar:1.1'
+    implementation 'com.appsee:appsee-android:+'
 
     //Butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'
