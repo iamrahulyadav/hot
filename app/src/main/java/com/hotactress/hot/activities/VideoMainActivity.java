@@ -214,7 +214,10 @@ public class VideoMainActivity extends AppCompatActivity implements
     @Override
     public void videoSelected(Video video) {
         Gen.logFirebaseEvent(Constants.VIDEO_SELECTED_ACTIVITY, video.getUrl());
-        extractVideoQualities(this, video);
+        Gen.openWebPage(video.getUrl(), this);
+        return;
+//
+//        extractVideoQualities(this, video);
     }
 
 

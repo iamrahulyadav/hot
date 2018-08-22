@@ -105,6 +105,7 @@ public class VideoMoreOptionFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+
         if (v.getId() == downloadButton.getId()) {
             Gen.logFirebaseEvent(Constants.VIDEO_PLAYED_ACTIVITY, video.getUrl());
 
