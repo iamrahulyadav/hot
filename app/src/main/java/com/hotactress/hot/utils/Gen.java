@@ -5,6 +5,7 @@ import android.app.DownloadManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -637,6 +638,17 @@ public class Gen {
         if (!file.exists())
             file.mkdir();
         return file;
+    }
+
+    public static void openWebPage(String url, Activity activity) {
+        try {
+            Uri webpage = Uri.parse(url);
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, webpage);
+            activity.startActivity(myIntent);
+        } catch (ActivityNotFoundException e) {
+            Gen.toastLong("No application can handle this request. Please install a web browser or check your URL.");
+            e.printStackTrace();
+        }
     }
 
 }

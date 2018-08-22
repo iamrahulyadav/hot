@@ -1,5 +1,6 @@
 package com.hotactress.hot.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,11 +39,13 @@ public class ChatMainActivity extends PresenceActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    Activity activity;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = this;
 
         setContentView(R.layout.activity_chat_main);
         mAuth = FirebaseAuth.getInstance();
@@ -63,6 +66,13 @@ public class ChatMainActivity extends PresenceActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        findViewById(R.id.more_apps).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gen.startActivity(activity, false, MoreAppsActivity.class);
+            }
+        });
     }
 
     @Override

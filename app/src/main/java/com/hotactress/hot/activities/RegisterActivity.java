@@ -63,11 +63,15 @@ public class RegisterActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Gen.showLoader(activity);
                 String displayNameString = displayName.getText().toString().trim();
 
-                if(!TextUtils.isEmpty(displayNameString)){
-                    if(displayNameString.toLowerCase().equals(Gen.getLogeedInUserFromLocalStorage().toLowerCase())){
+                if(TextUtils.isEmpty(displayNameString)) {
+                    Gen.toastLong("Please enter your name");
+                } else {
+
+                    Gen.showLoader(activity);
+
+                    if (displayNameString.toLowerCase().equals(Gen.getLogeedInUserFromLocalStorage().toLowerCase())) {
                         Gen.saveLogInInLocalStorage();
                         Gen.startActivity(activity, true, ChatMainActivity.class);
                     } else {
@@ -102,6 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userProfile.setDeviceToken(deviceToken);
 
                     Gen.saveLoggedInUserNameInLocalStorage(displayNameString);
+                    Gen.saveLogInInLocalStorage();
 
                     Gen.saveInviteURLToLocalStorage(activity);
 

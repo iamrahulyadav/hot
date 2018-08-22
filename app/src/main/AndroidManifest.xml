@@ -49,6 +49,9 @@
             android:name=".activities.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activities.MoreAppsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.StartActivity"
             android:screenOrientation="portrait" >
             <intent-filter>

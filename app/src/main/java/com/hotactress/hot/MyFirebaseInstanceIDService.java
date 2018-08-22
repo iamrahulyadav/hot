@@ -3,6 +3,7 @@ package com.hotactress.hot;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.appsee.Appsee;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +27,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        Appsee.start();
+
 
         if(currentUser!=null) {
 
